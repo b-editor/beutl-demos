@@ -42,6 +42,7 @@ internal sealed class HeadlessVideoRecorder : IAsyncDisposable
         _pixels = encodeVideo ? new byte[checked(_width * _height * 4)] : [];
         _outputPath = Path.GetFullPath(outputPath);
         _pointer = pointer;
+        if (pointer != null) _cursor.SaveAssets(Path.Combine(Path.GetDirectoryName(_outputPath)!, "macos-cursors"));
         if (encodeVideo) _encoder = new DemoVideoEncoder(outputPath, _width, _height, frameRate, format);
     }
 
@@ -104,6 +105,7 @@ internal sealed class HeadlessVideoRecorder : IAsyncDisposable
         {
             var recording = new DemoMotionRecording(_width, _height, FrameRate, _frames, _window.RenderScaling);
             await File.WriteAllTextAsync(Path.ChangeExtension(_outputPath, ".motion.json"), JsonSerializer.Serialize(recording));
+            TestContext.Progress.WriteLine("Recorded cursor shapes: " + string.Join(", ", _frames.Select(f => f.Cursor).Distinct()));
         }
     }
 

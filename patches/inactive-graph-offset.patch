@@ -1,0 +1,26 @@
+diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
+--- a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
++++ b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
+@@ -117,7 +117,8 @@ public partial class GraphEditorView
+ 
+     private void FitGraph(bool selection, bool heightOnly = false)
+     {
+-        if (_fitting || DataContext is not GraphEditorViewModel { SelectedView.Value: { } channel } model
++        if (_fitting || !IsEffectivelyVisible || TopLevel.GetTopLevel(this) == null
++            || DataContext is not GraphEditorViewModel { SelectedView.Value: { } channel } model
+             || scroll.Viewport.Width <= 0 || scroll.Viewport.Height <= 0) return;
+         var keys = channel.KeyFrames.Where(x => !selection || x.IsSelected.Value).ToArray();
+         if (keys.Length == 0) return;
+diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs
+--- a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs
++++ b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs
+@@ -141,7 +141,8 @@ public partial class GraphEditorView : UserControl
+ 
+     private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
+     {
+-        if (DataContext is GraphEditorViewModel viewModel)
++        if (IsEffectivelyVisible && TopLevel.GetTopLevel(this) != null
++            && DataContext is GraphEditorViewModel viewModel)
+         {
+             viewModel.ScrollOffset.Value = scroll.Offset;
+         }

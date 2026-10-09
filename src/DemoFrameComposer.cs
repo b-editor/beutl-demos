@@ -15,17 +15,18 @@ internal sealed class DemoFrameComposer : IDisposable
     private readonly int _width;
     private readonly int _height;
 
-    public DemoFrameComposer(int width, int height, DemoCameraSettings settings)
+    public DemoFrameComposer(int width, int height, int sourceWidth, int sourceHeight, DemoCameraSettings settings)
     {
         settings.Validate();
         _width = width;
         _height = height;
         _titleBar = settings.TitleBarPath == null ? null : Load(settings.TitleBarPath);
-        float titleHeight = _titleBar == null ? 0 : _titleBar.Height * width / (float)_titleBar.Width;
-        float scale = Math.Min(width * (1 - 2 * (float)settings.Inset) / width,
-            height * (1 - 2 * (float)settings.Inset) / (height + titleHeight));
-        float outerWidth = width * scale;
-        float outerHeight = (height + titleHeight) * scale;
+        // Fit the captured window's aspect ratio into the output; UI size and video size are independent.
+        float titleHeight = _titleBar == null ? 0 : _titleBar.Height * sourceWidth / (float)_titleBar.Width;
+        float scale = Math.Min(width * (1 - 2 * (float)settings.Inset) / sourceWidth,
+            height * (1 - 2 * (float)settings.Inset) / (sourceHeight + titleHeight));
+        float outerWidth = sourceWidth * scale;
+        float outerHeight = (sourceHeight + titleHeight) * scale;
         var window = SKRect.Create((width - outerWidth) / 2, (height - outerHeight) / 2, outerWidth, outerHeight);
         _title = new SKRect(window.Left, window.Top, window.Right, window.Top + titleHeight * scale);
         _content = new SKRect(window.Left, _title.Bottom, window.Right, window.Bottom);
@@ -55,7 +56,8 @@ internal sealed class DemoFrameComposer : IDisposable
         return frame with
         {
             X = point.X, Y = point.Y,
-            CameraTarget = frame.CameraTarget is { } target ? Map(target.X, target.Y) : null
+            CameraTarget = frame.CameraTarget is { } target ? Map(target.X, target.Y) : null,
+            GraphTarget = frame.GraphTarget is { } graph ? Map(graph.X, graph.Y) : null
         };
     }).ToArray();
 

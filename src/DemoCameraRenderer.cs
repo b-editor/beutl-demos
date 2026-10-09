@@ -6,6 +6,10 @@ namespace Beutl.HeadlessUITests.Demos;
 
 internal static class DemoCameraRenderer
 {
+    // Keep the LP delivery format fixed while the source window follows the real display layout.
+    private const int OutputWidth = 1920;
+    private const int OutputHeight = 1080;
+
     // The camera pass never touches Avalonia controls; keep decoding/compositing off the UI dispatcher.
     public static Task RenderAsync(string sourcePath, string outputPath, DemoCameraSettings settings)
         => Task.Run(() => RenderCoreAsync(sourcePath, outputPath, settings));
@@ -15,9 +19,9 @@ internal static class DemoCameraRenderer
         var recording = JsonSerializer.Deserialize<DemoMotionRecording>(
             await File.ReadAllTextAsync(Path.ChangeExtension(sourcePath, ".motion.json")))
             ?? throw new InvalidDataException("Missing pointer recording.");
-        using var composer = new DemoFrameComposer(recording.OutputWidth, recording.OutputHeight, settings);
+        using var composer = new DemoFrameComposer(OutputWidth, OutputHeight, recording.Width, recording.Height, settings);
         DemoCameraPose[] poses = DemoCameraMotion.Plan(composer.DesktopFrames(recording.Frames), recording.FrameRate, settings);
-        using var output = new SKBitmap(new SKImageInfo(recording.OutputWidth, recording.OutputHeight, SKColorType.Bgra8888, SKAlphaType.Opaque));
+        using var output = new SKBitmap(new SKImageInfo(OutputWidth, OutputHeight, SKColorType.Bgra8888, SKAlphaType.Opaque));
         using var canvas = new SKCanvas(output);
         string[] checkpoints = ["04-finished", "Create-spline-handles", "Animate-spline-handles", "effect-picker"];
         for (int i = 0; i < checkpoints.Length; i++)
@@ -46,7 +50,7 @@ internal static class DemoCameraRenderer
         if (recording.Width <= 0 || recording.Height <= 0 || recording.Width % 2 != 0 || recording.Height % 2 != 0
             || recording.Frames.Count == 0)
             throw new InvalidDataException("Invalid recording dimensions or empty frame timeline.");
-        using var composer = new DemoFrameComposer(recording.OutputWidth, recording.OutputHeight, settings);
+        using var composer = new DemoFrameComposer(OutputWidth, OutputHeight, recording.Width, recording.Height, settings);
         DemoCameraPose[] poses = DemoCameraMotion.Plan(composer.DesktopFrames(recording.Frames), recording.FrameRate, settings);
         var start = new ProcessStartInfo(DemoVideoEncoder.Executable)
         {
@@ -64,13 +68,13 @@ internal static class DemoCameraRenderer
         Task<string> errors = decoder.StandardError.ReadToEndAsync();
         try
         {
-            await using var encoder = new DemoVideoEncoder(outputPath, recording.OutputWidth, recording.OutputHeight, recording.FrameRate, "bgra");
+            await using var encoder = new DemoVideoEncoder(outputPath, OutputWidth, OutputHeight, recording.FrameRate, "bgra");
             var info = new SKImageInfo(recording.Width, recording.Height, SKColorType.Bgra8888, SKAlphaType.Opaque);
             using var source = new SKBitmap(info);
-            using var output = new SKBitmap(new SKImageInfo(recording.OutputWidth, recording.OutputHeight, SKColorType.Bgra8888, SKAlphaType.Opaque));
+            using var output = new SKBitmap(new SKImageInfo(OutputWidth, OutputHeight, SKColorType.Bgra8888, SKAlphaType.Opaque));
             using var canvas = new SKCanvas(output);
             var pixels = new byte[checked(recording.Width * recording.Height * 4)];
-            var outputPixels = new byte[checked(recording.OutputWidth * recording.OutputHeight * 4)];
+            var outputPixels = new byte[checked(OutputWidth * OutputHeight * 4)];
             for (int frame = 0; frame < poses.Length; frame++)
             {
                 using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));

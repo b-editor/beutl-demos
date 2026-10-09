@@ -67,10 +67,11 @@ public sealed class HeroDemoCaptureTests
         Assert.That(attached["source"]!.GetValue<string>(), Is.EqualTo("LiveEditor"));
         // The LP walkthrough explicitly starts from a prepared layout, not a new-project tutorial.
         await mcp.EditAsync(DemoWorkflow.StartingLayout(templates));
+        int titleBarHeight = 0;
         if (camera.TitleBarPath != null)
         {
             string titleBarPath = System.IO.Path.Combine(output, "macos-titlebar.png");
-            DemoMacTitleBar.Capture(titleBarPath, 1920, camera.RenderScale);
+            titleBarHeight = DemoMacTitleBar.Capture(titleBarPath, camera.WindowWidth, camera.RenderScale);
             camera = camera with { TitleBarPath = titleBarPath };
         }
         if (camera.WallpaperPath is { } wallpaper)
@@ -86,7 +87,10 @@ public sealed class HeroDemoCaptureTests
         bool pointerLock = Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty;
         // Native pointer lock reads the physical mouse, which must never be touched by a headless capture.
         Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty = false;
-        var ui = new DemoEditor(editor, renderScale: camera.RenderScale);
+        int contentHeight = camera.WindowHeight - titleBarHeight;
+        Assert.That(contentHeight, Is.GreaterThanOrEqualTo(480), "The title bar must leave room for the editor.");
+        var ui = new DemoEditor(editor, camera.WindowWidth, contentHeight, camera.RenderScale);
+        TestContext.Progress.WriteLine($"Window: {camera.WindowWidth}x{camera.WindowHeight} logical pixels including a {titleBarHeight}px title bar, {camera.RenderScale}x Retina scale.");
         try
         {
             await ui.SeekAsync(1.2);
@@ -143,6 +147,9 @@ public sealed class HeroDemoCaptureTests
         string settingsPath = Environment.GetEnvironmentVariable("BEUTL_DEMO_CAMERA_SETTINGS")
             ?? System.IO.Path.Combine(sourceDirectory, "camera-settings.json");
         var settings = await DemoCameraSettings.LoadAsync(settingsPath);
+        // Reuse the title row captured at this recording's real window width and DPI.
+        string titleBar = System.IO.Path.Combine(sourceDirectory, "macos-titlebar.png");
+        if (File.Exists(titleBar)) settings = settings with { TitleBarPath = titleBar };
         string output = System.IO.Path.Combine(sourceDirectory, $"editor-demo-camera-{DateTime.UtcNow:yyyyMMdd-HHmmss}-{Guid.NewGuid().ToString("N")[..6]}.mp4");
         await DemoCameraRenderer.RenderAsync(System.IO.Path.Combine(sourceDirectory, "editor-demo.mp4"), output, settings);
         TestContext.Progress.WriteLine($"Camera video: {output}");
@@ -171,7 +178,7 @@ public sealed class HeroDemoCaptureTests
             await mcp.CallAsync("attach_active_editor");
             var recording = JsonSerializer.Deserialize<DemoMotionRecording>(await File.ReadAllTextAsync(
                 System.IO.Path.Combine(source, "editor-demo.motion.json")))!;
-            DemoMacTitleBar.Capture(System.IO.Path.Combine(output, "macos-titlebar.png"), recording.OutputWidth, recording.RenderScale);
+            DemoMacTitleBar.Capture(System.IO.Path.Combine(output, "macos-titlebar.png"), recording.LogicalWidth, recording.RenderScale);
             var settings = (await DemoCameraSettings.LoadAsync(System.IO.Path.Combine(source, "camera-settings.json"))) with
             {
                 Inset = 0.055, RenderScale = recording.RenderScale, WallpaperPath = "wallpaper.png", TitleBarPath = "macos-titlebar.png"

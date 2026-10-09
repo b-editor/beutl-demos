@@ -1,40 +1,66 @@
+using System.Text.Json;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using SkiaSharp;
 
 namespace Beutl.HeadlessUITests.Demos;
 
-// Composite after Avalonia has rendered every popup, just like a screen recorder's cursor layer.
+internal sealed record DemoCursorImage(string File, double Width, double Height, double HotspotX, double HotspotY);
+internal sealed record DemoCursorManifest(double Scale, Dictionary<string, DemoCursorImage> Cursors);
+
+// Composite native AppKit artwork after every Avalonia popup, using its real click hotspot.
 internal sealed class DemoCursorOverlay : IDisposable
 {
-    private readonly SKPath _path = SKPath.ParseSvgPathData("M0,0 L0,23 L6,17 L11,27 L15,25 L10,16 L19,16 Z");
-    private readonly SKPaint _fill = new() { Color = SKColors.White, IsAntialias = true };
-    private readonly SKPaint _outline = new()
+    private readonly string _directory;
+    private readonly DemoCursorManifest _manifest;
+    private readonly Dictionary<string, SKImage> _images = [];
+    private static readonly SKSamplingOptions Sampling = new(SKCubicResampler.CatmullRom);
+
+    public DemoCursorOverlay()
     {
-        Color = SKColors.Black, IsAntialias = true, Style = SKPaintStyle.Stroke,
-        StrokeWidth = 1.5f, StrokeJoin = SKStrokeJoin.Round
-    };
+        _directory = Environment.GetEnvironmentVariable("BEUTL_DEMO_CURSOR_DIR")
+            ?? throw new InvalidOperationException("Run scripts/demo.py to export the host's native macOS cursors first.");
+        _manifest = JsonSerializer.Deserialize<DemoCursorManifest>(File.ReadAllText(Path.Combine(_directory, "cursors.json")))
+            ?? throw new InvalidDataException("Native cursor manifest is missing.");
+        foreach (var entry in _manifest.Cursors.Values.DistinctBy(c => c.File))
+        {
+            SKImage image = SKImage.FromEncodedData(Path.Combine(_directory, entry.File))
+                ?? throw new InvalidDataException($"Cannot load cursor {entry.File}.");
+            if (image.Width != Math.Ceiling(entry.Width * _manifest.Scale)
+                || image.Height != Math.Ceiling(entry.Height * _manifest.Scale))
+                throw new InvalidDataException($"Cursor {entry.File} does not match its native scale.");
+            _images.Add(entry.File, image);
+        }
+    }
+
+    public void SaveAssets(string directory)
+    {
+        Directory.CreateDirectory(directory);
+        foreach (string file in _images.Keys.Append("cursors.json"))
+            File.Copy(Path.Combine(_directory, file), Path.Combine(directory, file));
+    }
 
     public void Draw(WriteableBitmap frame, DemoPointerFrame pointer)
     {
+        if (pointer.Cursor == "None") return;
+        // Standard cursors use their native names. A custom bitmap can safely fall back to Arrow.
+        DemoCursorImage entry = _manifest.Cursors.GetValueOrDefault(pointer.Cursor) ?? _manifest.Cursors["Arrow"];
         using ILockedFramebuffer buffer = frame.Lock();
         SKColorType color = buffer.Format == PixelFormat.Bgra8888 ? SKColorType.Bgra8888
             : buffer.Format == PixelFormat.Rgba8888 ? SKColorType.Rgba8888
             : throw new NotSupportedException($"Unsupported cursor pixel format: {buffer.Format}");
         using var surface = SKSurface.Create(new SKImageInfo(frame.PixelSize.Width, frame.PixelSize.Height,
             color, SKAlphaType.Premul), buffer.Address, buffer.RowBytes);
-        SKCanvas canvas = surface.Canvas;
-        canvas.Translate((float)(pointer.X * frame.PixelSize.Width), (float)(pointer.Y * frame.PixelSize.Height));
-        canvas.Scale((float)(frame.Dpi.X / 96), (float)(frame.Dpi.Y / 96));
-        canvas.DrawPath(_path, _fill);
-        canvas.DrawPath(_path, _outline);
-        canvas.Flush();
+        float scaleX = (float)(frame.Dpi.X / 96), scaleY = (float)(frame.Dpi.Y / 96);
+        float left = (float)(pointer.X * frame.PixelSize.Width - entry.HotspotX * scaleX);
+        float top = (float)(pointer.Y * frame.PixelSize.Height - entry.HotspotY * scaleY);
+        surface.Canvas.DrawImage(_images[entry.File],
+            SKRect.Create(left, top, (float)entry.Width * scaleX, (float)entry.Height * scaleY), Sampling);
+        surface.Canvas.Flush();
     }
 
     public void Dispose()
     {
-        _path.Dispose();
-        _fill.Dispose();
-        _outline.Dispose();
+        foreach (SKImage image in _images.Values) image.Dispose();
     }
 }

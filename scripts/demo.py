@@ -71,8 +71,13 @@ def run_scenario(args):
                BEUTL_DEMO_CAPTURE_ONLY="0",
                BEUTL_DEMO_OUTPUT_DIR=str(Path(args.output).resolve()),
                BEUTL_DEMO_CAMERA_SETTINGS=str(Path(args.settings).resolve()))
-    if command in {"record", "preview"} and sys.platform != "darwin":
-        raise RuntimeError("The macOS presentation captures the real macOS title bar; run it on macOS.")
+    if command in {"check", "record", "preview"}:
+        if sys.platform != "darwin":
+            raise RuntimeError("The macOS presentation uses native AppKit cursors; run it on macOS.")
+        cursor_dir = ROOT / ".cache/macos-cursors"
+        run(["swift", "-module-cache-path", ROOT / ".cache/swift-modules",
+             ROOT / "scripts/export-macos-cursors.swift", cursor_dir])
+        env["BEUTL_DEMO_CURSOR_DIR"] = str(cursor_dir)
     if command in {"camera", "verify"}:
         if not args.capture:
             raise ValueError(f"{command} requires --capture /path/to/hero-capture-directory")
@@ -83,6 +88,7 @@ def run_scenario(args):
     }
     selection = ("FullyQualifiedName~Demos.DemoCameraMotionTests|"
                  "FullyQualifiedName~Demos.DemoCursorOverlayTests|"
+                 "FullyQualifiedName~Demos.DemoGraphFramingTests|"
                  "FullyQualifiedName~Demos.DemoFrameComposerTests") if command == "check" else (
                      "FullyQualifiedName=" + SCENARIO + methods[command])
     invocation = ["dotnet", "test", PROJECT, "-c", "Release", "-f", "net10.0",

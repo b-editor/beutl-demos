@@ -45,12 +45,14 @@ internal sealed class DemoEditor
 {
     private readonly EditViewModel _editor;
     private readonly GraphEditorTabViewModel _graph;
+    private readonly DemoCursorState _cursor;
     private Point _pointer = new(700, 380);
     private bool _focusCamera;
     private DemoCameraTarget? _cameraTarget;
+    private DemoCameraTarget? _graphCameraTarget;
     private string? _instruction;
 
-    public DemoEditor(EditViewModel editor, int width = 1920, int height = 1080, double renderScale = 2)
+    public DemoEditor(EditViewModel editor, int width, int height, double renderScale)
     {
         _editor = editor;
         Window = new Window
@@ -59,6 +61,7 @@ internal sealed class DemoEditor
             Height = height,
             Content = new EditView { DataContext = editor }
         };
+        _cursor = new DemoCursorState(Window);
         // Flyout hosts must render into the captured headless window.
         Window.Styles.Add(new Style(s => s.OfType<Popup>())
         {
@@ -95,13 +98,15 @@ internal sealed class DemoEditor
     public async Task OverviewAsync(HeadlessVideoRecorder recorder, double seconds = 0.7)
     {
         _focusCamera = false;
+        _graphCameraTarget = null;
         await recorder.HoldAsync(seconds);
     }
 
     public DemoPointerFrame CapturePointer() => new(
         Math.Clamp(_pointer.X / Window.ClientSize.Width, 0, 1),
         Math.Clamp(_pointer.Y / Window.ClientSize.Height, 0, 1), _focusCamera && !_graph.IsSelected.Value,
-        Caption: _instruction, CameraTarget: _cameraTarget);
+        Caption: _instruction, CameraTarget: _cameraTarget, Cursor: _cursor.At(_pointer),
+        GraphTarget: _graph.IsSelected.Value ? _graphCameraTarget : null);
 
     public async Task FramePropertyAsync(Guid owner, string name, HeadlessVideoRecorder recorder)
     {
@@ -112,11 +117,17 @@ internal sealed class DemoEditor
 
     private async Task FrameControlAsync(Control control, HeadlessVideoRecorder recorder)
     {
-        Point center = control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), Window)!.Value;
-        _cameraTarget = new DemoCameraTarget(Math.Clamp(center.X / Window.ClientSize.Width, 0, 1),
-            Math.Clamp(center.Y / Window.ClientSize.Height, 0, 1));
+        _cameraTarget = CenterOf(control);
+        _graphCameraTarget = null;
         _focusCamera = true;
         await recorder.HoldAsync(0.6);
+    }
+
+    private DemoCameraTarget CenterOf(Control control)
+    {
+        Point center = control.TranslatePoint(new Point(control.Bounds.Width / 2, control.Bounds.Height / 2), Window)!.Value;
+        return new DemoCameraTarget(Math.Clamp(center.X / Window.ClientSize.Width, 0, 1),
+            Math.Clamp(center.Y / Window.ClientSize.Height, 0, 1));
     }
 
     public async Task SeekAsync(double seconds)
@@ -135,6 +146,7 @@ internal sealed class DemoEditor
     public async Task PlayAsync(HeadlessVideoRecorder recorder, double start, double end)
     {
         _focusCamera = false;
+        _graphCameraTarget = null;
         await recorder.HoldAsync(0.6);
         int count = (int)Math.Round((end - start) * recorder.FrameRate);
         for (int frame = 0; frame < count; frame++)
@@ -432,17 +444,22 @@ internal sealed class DemoEditor
         if (CapturePointer().Focus) await OverviewAsync(recorder, 1.2);
         else _focusCamera = false;
         GraphEditorView view = Window.GetVisualDescendants().OfType<GraphEditorView>().Single(v => v.IsEffectivelyVisible);
+        _graphCameraTarget = CenterOf(view);
         var model = (GraphEditorViewModel)view.DataContext!;
         Assert.That(model.Animation.KeyFrames.Count, Is.GreaterThan(1));
         await GraphActionAsync("FitAll", recorder);
         await recorder.HoldAsync(0.8);
         ScrollViewer scroll = view.FindControl<ScrollViewer>("scroll")!;
+        TestContext.Progress.WriteLine($"Graph fit: scale={model.Options.Value.Scale}, offset={scroll.Offset}, optionOffset={model.Options.Value.Offset}, margin={model.Margin.Value}, panel={model.PanelWidth.Value}, extent={scroll.Extent}, viewport={scroll.Viewport}");
         double span = (model.Animation.KeyFrames.Last().KeyTime - model.Animation.KeyFrames.First().KeyTime)
             .TimeToPixel(model.Options.Value.Scale);
         Assert.That(span, Is.GreaterThan(scroll.Viewport.Width * 0.8), "Fit must use the horizontal plot area too.");
         foreach (Path key in view.GetVisualDescendants().OfType<Path>().Where(p => p.Name == "KeyTimeIcon"))
         {
             Point center = key.TranslatePoint(default, scroll)!.Value;
+            // A key at absolute time zero sits on the left edge: scroll offsets cannot be negative.
+            Assert.That(center.X, Is.InRange(0, scroll.Viewport.Width - 16),
+                "Fitted keys must be visible horizontally before editing the curve.");
             Assert.That(center.Y, Is.InRange(16, scroll.Viewport.Height - 16),
                 "Fitted keys must be visible vertically before editing the curve.");
         }
@@ -525,10 +542,25 @@ internal sealed class DemoEditor
     public async Task MoveEndingKeyAsync(double localTime, HeadlessVideoRecorder recorder)
     {
         GraphEditorView view = Window.GetVisualDescendants().OfType<GraphEditorView>().Single(v => v.IsEffectivelyVisible);
+        _graphCameraTarget = CenterOf(view);
         var model = (GraphEditorViewModel)view.DataContext!;
         Path key = view.GetVisualDescendants().OfType<Path>().Where(p => p.Name == "KeyTimeIcon")
             .OrderBy(p => ((GraphEditorKeyFrameViewModel)p.DataContext!).Model.KeyTime).Last();
         var item = (GraphEditorKeyFrameViewModel)key.DataContext!;
+        ScrollViewer scroll = view.FindControl<ScrollViewer>("scroll")!;
+        double keyY = key.TranslatePoint(default, scroll)!.Value.Y;
+        if (keyY < 16 || keyY > scroll.Viewport.Height - 16)
+        {
+            // Smaller laptop layouts may clip a newly raised value. Fit only the height,
+            // leaving enough time visible to drag the ending key later in the sequence.
+            ToggleButton autoHeight = view.GetVisualDescendants().OfType<ToggleButton>()
+                .Single(b => Equals(b.Tag, "AutoHeight"));
+            Assert.That(autoHeight.IsChecked, Is.Not.True);
+            await ClickAsync(autoHeight, recorder);
+            await recorder.HoldAsync(0.6);
+            Assert.That(key.TranslatePoint(default, scroll)!.Value.Y,
+                Is.InRange(16, scroll.Viewport.Height - 16));
+        }
         // Move the playhead a little before the endpoint so it cannot intercept the diamond.
         await ScrubAsync(model.Element!.Start.TotalSeconds + item.Model.KeyTime.TotalSeconds - 0.08, recorder);
         await PointAtAsync(key, recorder, default(Point));
@@ -608,6 +640,7 @@ internal sealed class DemoEditor
 
     public async Task ShowTimelineAsync(HeadlessVideoRecorder recorder)
     {
+        _graphCameraTarget = null;
         GraphEditorView? graph = Window.GetVisualDescendants().OfType<GraphEditorView>().SingleOrDefault(v => v.IsEffectivelyVisible);
         if (graph?.DataContext is GraphEditorViewModel model && model.Options.Value.Scale > 0.86f)
         {

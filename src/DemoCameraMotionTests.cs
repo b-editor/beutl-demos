@@ -64,6 +64,24 @@ public sealed class DemoCameraMotionTests
     }
 
     [Test]
+    public void Graph_zoom_is_optional_and_stays_fixed_until_playback()
+    {
+        var target = new DemoCameraTarget(0.6, 0.8);
+        DemoPointerFrame[] frames = Enumerable.Range(0, 180).Select(i =>
+            new DemoPointerFrame(i % 2, (i / 2) % 2, false, GraphTarget: target))
+            .Concat(Enumerable.Repeat(new DemoPointerFrame(0.9, 0.9, false), 180)).ToArray();
+        Assert.That(DemoCameraMotion.Plan(frames, 30, new DemoCameraSettings()),
+            Is.All.EqualTo(new DemoCameraPose(0.5, 0.5, 1)));
+        var settings = new DemoCameraSettings { GraphZoom = 1.35 };
+        DemoCameraPose[] poses = DemoCameraMotion.Plan(frames, 30, settings);
+        DemoPointerFrame[] parked = frames.Select(f => f with { X = 0.5, Y = 0.5 }).ToArray();
+        Assert.That(poses, Is.EqualTo(DemoCameraMotion.Plan(parked, 30, settings)),
+            "A graph operation must frame the panel, not chase individual handles.");
+        Assert.That(poses[179].Zoom, Is.EqualTo(1.35).Within(1e-6));
+        Assert.That(poses[^1].Zoom, Is.EqualTo(1).Within(1e-6), "Playback returns to the overview.");
+    }
+
+    [Test]
     public void Camera_timing_is_consistent_at_thirty_and_sixty_fps()
     {
         var focus = new DemoPointerFrame(0.8, 0.2, true);

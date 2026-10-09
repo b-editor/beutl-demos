@@ -12,7 +12,7 @@ namespace Beutl.HeadlessUITests.Demos;
 
 internal static class DemoMacTitleBar
 {
-    public static void Capture(string path, int width, double renderScale = 2)
+    public static int Capture(string path, int width, double renderScale = 2)
     {
         if (!OperatingSystem.IsMacOS()) throw new PlatformNotSupportedException("Capture the production macOS title bar on macOS.");
         // Host just the production title row. Attaching MainView itself would also run app-startup tasks.
@@ -57,6 +57,7 @@ internal static class DemoMacTitleBar
             }
             using SKData png = bitmap.Encode(SKEncodedImageFormat.Png, 100);
             File.WriteAllBytes(path, png.ToArray());
+            return (int)Math.Round(window.ClientSize.Height);
         }
         finally
         {
