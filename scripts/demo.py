@@ -115,7 +115,7 @@ def web_assets(args):
         work = Path(temporary)
         shutil.copy2(source, work / "showcase.mp4")
         run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-i", source,
-             "-map", "0:v:0", "-an", "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "28",
+             "-map", "0:v:0", "-an", "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "32",
              "-deadline", "good", "-cpu-used", "4", "-row-mt", "1", "-threads", "8",
              "-pix_fmt", "yuv420p", work / "showcase.webm"])
         run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-i", source,
