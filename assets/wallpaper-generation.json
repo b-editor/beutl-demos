@@ -1,0 +1,5 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "asset": "wallpaper.png",
+  "prompt": "Use case: lighting-weather edit. Edit this desktop wallpaper only. Preserve exactly the calm soft layered landscape and the arrangement of its broad flowing hills. Change it from a light dawn scene to a dark sophisticated blue-hour / night wallpaper: deep charcoal, smoky navy/slate blue and very muted dark sage. The entire sky must also be dark, with no bright cream or white sunset, no bright sun. Subtle low-contrast tonal separation must keep the hills discernible. Target a dark macOS desktop wallpaper that quietly supports a black app window. Keep a soft matte atmospheric finish. No grain, speckles, stars, lights, objects, text, UI, logos or border. Full bleed landscape 16:9, high resolution. Change lighting and colors only; do not redesign the composition."
+}

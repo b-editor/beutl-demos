@@ -1,0 +1,143 @@
+diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
+index e307601b4..4ff138b43 100644
+--- a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
++++ b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
+@@ -144,6 +144,9 @@ public partial class GraphEditorView
+                     / TimeSpan.FromSeconds(duration).TimeToPixel(1), 0.001, 100);
+                 model.Options.Value = model.Options.Value with { Scale = scale };
+             }
++            // The height subscription is dispatched. Apply it before layout so scrolling is not
++            // clamped against the previous, smaller extent when fitting increases the scale.
++            graphPanel.Height = Math.Max(model.MinHeight.Value, scroll.Bounds.Height);
+             graphPanel.UpdateLayout();
+             double x = heightOnly ? scroll.Offset.X : keys.Min(x => x.Model.KeyTime.TimeToPixel(model.Options.Value.Scale))
+                 + model.Margin.Value.Left - padding;
+diff --git a/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs b/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
+index fd4f3f97e..22e7ceb8b 100644
+--- a/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
++++ b/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
+@@ -44,7 +44,7 @@ public sealed partial class TimelineTabView
+         float realDelta = MathF.Sign(delta) * MathF.Abs(delta);
+ 
+         scale = MathF.Pow(ZoomSpeed, realDelta) * scale;
+-        scale = Math.Min(scale, 2);
++        scale = Math.Min(scale, 100);
+ 
+         offset.X = ZoomOffsetX(pointerPos.X, offset.X, oldScale, scale);
+     }
+diff --git a/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs b/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs
+index adc55f1cc..67e4affed 100644
+--- a/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs
++++ b/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs
+@@ -45,7 +45,7 @@ public readonly record struct TimelineOptions
+     public float Scale
+     {
+         get => _scale;
+-        init => _scale = Math.Min(value, 2);
++        init => _scale = Math.Min(value, 100);
+     }
+ 
+     public Vector2 Offset
+diff --git a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs b/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs
+index 0e6b98a24..4c56c4a76 100644
+--- a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs
++++ b/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs
+@@ -17,6 +17,46 @@ namespace Beutl.HeadlessUITests;
+ [TestFixture]
+ public class GraphEditorInteractionTests
+ {
++    [AvaloniaTest]
++    [TestCase(540)]
++    [TestCase(720)]
++    public async Task Fit_all_keeps_both_value_extremes_visible_when_expanding_the_vertical_range(int height)
++    {
++        using var graph = await GraphScope.CreateAsync(separateHandles: true, selectAll: false);
++        graph.Window.Height = height;
++        graph.Second.Value = 475;
++        HeadlessTestHelpers.Render(3);
++        double oldScale = graph.Model.ScaleY.Value;
++        graph.View.Focus();
++        PressKey(graph, Key.F);
++        HeadlessTestHelpers.Render(3);
++        var scroll = graph.View.FindControl<ScrollViewer>("scroll")!;
++        Assert.That(graph.Model.ScaleY.Value, Is.GreaterThan(oldScale));
++        foreach (var key in new[] { graph.First, graph.Second })
++        {
++            Point center = graph.KeyFrame(key).TranslatePoint(default, scroll)!.Value;
++            Assert.That(center.Y, Is.InRange(16, scroll.Viewport.Height - 16),
++                $"The {key.Value} key must remain inside the fitted plot.");
++        }
++        graph.Capture($"fit-expanded-values-{height}");
++    }
++
++    [AvaloniaTest]
++    public async Task Fit_all_expands_a_subsecond_curve_across_the_viewport()
++    {
++        using var graph = await GraphScope.CreateAsync(separateHandles: true);
++        graph.First.KeyTime = TimeSpan.FromSeconds(0.1);
++        graph.Second.KeyTime = TimeSpan.FromSeconds(0.88);
++        HeadlessTestHelpers.Render(3);
++        graph.View.Focus();
++        PressKey(graph, Key.F);
++        var scroll = graph.View.FindControl<ScrollViewer>("scroll")!;
++        double span = (graph.Second.KeyTime - graph.First.KeyTime).TimeToPixel(graph.Model.Options.Value.Scale);
++        Assert.That(graph.Model.Options.Value.Scale, Is.GreaterThan(2));
++        Assert.That(span, Is.EqualTo(scroll.Viewport.Width - 64).Within(0.01));
++        graph.Capture("fit-subsecond-curve");
++    }
++
+     [AvaloniaTest]
+     [TestCase(KeyModifiers.Control, false)]
+     [TestCase(KeyModifiers.Meta, false)]
+@@ -430,7 +470,7 @@ public class GraphEditorInteractionTests
+     public async Task Ruler_zoom_at_the_time_scale_limit_does_not_pan()
+     {
+         using var graph = await GraphScope.CreateAsync(selectAll: false);
+-        graph.Model.Options.Value = graph.Model.Options.Value with { Scale = 2 };
++        graph.Model.Options.Value = graph.Model.Options.Value with { Scale = 100 };
+         graph.Model.ScaleY.Value = 2;
+         HeadlessTestHelpers.Render(3);
+         graph.Model.ScrollOffset.Value = new Vector(75, 80);
+@@ -442,7 +482,7 @@ public class GraphEditorInteractionTests
+         Vector before = scroll.Offset;
+         graph.Window.MouseWheel(pointer, new Vector(0, 1), CommandModifier);
+         HeadlessTestHelpers.Render();
+-        Assert.That(graph.Model.Options.Value.Scale, Is.EqualTo(2));
++        Assert.That(graph.Model.Options.Value.Scale, Is.EqualTo(100));
+         Assert.That(scroll.Offset, Is.EqualTo(before));
+     }
+ 
+diff --git a/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs b/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs
+index bd44d0baf..651281ccd 100644
+--- a/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs
++++ b/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs
+@@ -36,21 +36,21 @@ public class TimelineOptionsTests
+     }
+ 
+     [Test]
+-    public void ScaleInit_ClampsValuesAboveTwo()
++    public void ScaleInit_ClampsValuesAboveOneHundred()
+     {
+-        var options = new TimelineOptions { Scale = 5f };
++        var options = new TimelineOptions { Scale = 150f };
+ 
+-        Assert.That(options.Scale, Is.EqualTo(2f));
++        Assert.That(options.Scale, Is.EqualTo(100f));
+     }
+ 
+     [Test]
+-    public void ScaleInit_KeepsValuesAtOrBelowTwo()
++    public void ScaleInit_KeepsValuesAtOrBelowOneHundred()
+     {
+-        var below = new TimelineOptions { Scale = 1.5f };
+-        var equal = new TimelineOptions { Scale = 2f };
++        var below = new TimelineOptions { Scale = 12f };
++        var equal = new TimelineOptions { Scale = 100f };
+ 
+-        Assert.That(below.Scale, Is.EqualTo(1.5f));
+-        Assert.That(equal.Scale, Is.EqualTo(2f));
++        Assert.That(below.Scale, Is.EqualTo(12f));
++        Assert.That(equal.Scale, Is.EqualTo(100f));
+     }
+ 
+     [Test]

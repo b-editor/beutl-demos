@@ -1,0 +1,11 @@
+{
+  "Zoom": 1.18,
+  "PanSeconds": 1.4,
+  "ZoomSeconds": 1.4,
+  "LookAheadSeconds": 0.15,
+  "DeadZone": 0.07,
+  "Inset": 0.055,
+  "RenderScale": 2,
+  "WallpaperPath": "../assets/wallpaper.png",
+  "TitleBarPath": "../assets/macos-titlebar.png"
+}

@@ -1,0 +1,1916 @@
+{
+  "schemaVersion": "1",
+  "Elements": [
+    {
+      "Start": "00:00:00",
+      "Length": "00:00:09",
+      "ZIndex": 0,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Background / Ivory",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Background / Ivory",
+          "Start": "00:00:00",
+          "Duration": "00:00:09",
+          "ZIndex": 0,
+          "Width": 1920,
+          "Height": 1080,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#fff3efe6",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:00",
+      "Length": "00:00:02.2000000",
+      "ZIndex": 2,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Create. / Mask reveal",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Create.",
+          "Start": "00:00:00",
+          "Duration": "00:00:02.2000000",
+          "ZIndex": 2,
+          "Size": 410,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": -4,
+          "SplitByCharacters": false,
+          "Text": "Create.",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff181a1d",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "X": 4,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": {
+            "IsEnabled": true,
+            "Name": "",
+            "Animations": {
+              "Right": {
+                "UseGlobalClock": false,
+                "Name": "",
+                "KeyFrames": [
+                  {
+                    "Value": 1436,
+                    "KeyTime": "00:00:00",
+                    "Name": "",
+                    "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                  },
+                  {
+                    "Value": 1436,
+                    "KeyTime": "00:00:00.1000000",
+                    "Name": "",
+                    "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                  },
+                  {
+                    "Value": 0,
+                    "KeyTime": "00:00:00.8800000",
+                    "Name": "",
+                    "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                  }
+                ],
+                "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+              }
+            },
+            "Left": 0,
+            "Top": 0,
+            "Right": 0,
+            "Bottom": 0,
+            "AutoCenter": false,
+            "AutoClip": false,
+            "$type": "[Beutl.Engine]Beutl.Graphics.Effects:Clipping"
+          },
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:00",
+      "Length": "00:00:01.3000000",
+      "ZIndex": 3,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Create. / Blue cursor",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Create. / Blue cursor",
+          "Start": "00:00:00",
+          "Duration": "00:00:01.3000000",
+          "ZIndex": 3,
+          "Width": 26,
+          "Height": 380,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff2758f3",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "ScaleY": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 100,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 100,
+                        "KeyTime": "00:00:01.0300000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:01.2400000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -716,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -716,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 716,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": -716,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:01.8000000",
+      "Length": "00:00:02.7800000",
+      "ZIndex": 4,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Animate. / Dark wipe",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Animate. / Dark wipe",
+          "Start": "00:00:01.8000000",
+          "Duration": "00:00:02.7800000",
+          "ZIndex": 4,
+          "Width": 1920,
+          "Height": 1080,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff181a1d",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -1920,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.4200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:02.0400000",
+      "Length": "00:00:02.5100000",
+      "ZIndex": 5,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Animate. / Upper outline",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Animate.",
+          "Start": "00:00:02.0400000",
+          "Duration": "00:00:02.5100000",
+          "ZIndex": 5,
+          "Size": 320,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": -2,
+          "SplitByCharacters": false,
+          "Text": "Animate.",
+          "Pen": {
+            "IsEnabled": true,
+            "Name": "",
+            "Brush": {
+              "IsEnabled": true,
+              "Name": "",
+              "Color": "#fff3efe6",
+              "Opacity": 100,
+              "Transform": null,
+              "TransformOrigin": "50%, 50%",
+              "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+            },
+            "DashArray": null,
+            "DashOffset": 0,
+            "Thickness": 2.6,
+            "MiterLimit": 10,
+            "StrokeCap": 0,
+            "StrokeJoin": 0,
+            "StrokeAlignment": 2,
+            "TrimStart": 0,
+            "TrimEnd": 100,
+            "TrimOffset": 0,
+            "Offset": 0
+          },
+          "Fill": null,
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -1900,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -110,
+                        "KeyTime": "00:00:00.6600000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -80,
+                        "KeyTime": "00:00:01.4800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -480,
+                        "KeyTime": "00:00:02.0600000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -310,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -310,
+                        "KeyTime": "00:00:01.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -680,
+                        "KeyTime": "00:00:02.2500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": -80,
+                "Y": -310,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:02.0400000",
+      "Length": "00:00:02.5100000",
+      "ZIndex": 6,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Animate. / Zoom",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Animate.",
+          "Start": "00:00:02.0400000",
+          "Duration": "00:00:02.5100000",
+          "ZIndex": 6,
+          "Size": 320,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": -2,
+          "SplitByCharacters": false,
+          "Text": "Animate.",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#fff3efe6",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "Scale": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 100,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 100,
+                        "KeyTime": "00:00:01.5000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 475,
+                        "KeyTime": "00:00:02.4000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 1900,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:02.0400000",
+      "Length": "00:00:02.5100000",
+      "ZIndex": 7,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Animate. / Lower outline",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Animate.",
+          "Start": "00:00:02.0400000",
+          "Duration": "00:00:02.5100000",
+          "ZIndex": 7,
+          "Size": 320,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": -2,
+          "SplitByCharacters": false,
+          "Text": "Animate.",
+          "Pen": {
+            "IsEnabled": true,
+            "Name": "",
+            "Brush": {
+              "IsEnabled": true,
+              "Name": "",
+              "Color": "#fff3efe6",
+              "Opacity": 100,
+              "Transform": null,
+              "TransformOrigin": "50%, 50%",
+              "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+            },
+            "DashArray": null,
+            "DashOffset": 0,
+            "Thickness": 2.6,
+            "MiterLimit": 10,
+            "StrokeCap": 0,
+            "StrokeJoin": 0,
+            "StrokeAlignment": 2,
+            "TrimStart": 0,
+            "TrimEnd": 100,
+            "TrimOffset": 0,
+            "Offset": 0
+          },
+          "Fill": null,
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -2100,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 110,
+                        "KeyTime": "00:00:00.7900000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 80,
+                        "KeyTime": "00:00:01.4800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 480,
+                        "KeyTime": "00:00:02.0600000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 310,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 310,
+                        "KeyTime": "00:00:01.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 680,
+                        "KeyTime": "00:00:02.2500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 80,
+                "Y": 310,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:04.2000000",
+      "Length": "00:00:02.8600000",
+      "ZIndex": 8,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Make it yours. / Blue wipe",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Make it yours. / Blue wipe",
+          "Start": "00:00:04.2000000",
+          "Duration": "00:00:02.8600000",
+          "ZIndex": 8,
+          "Width": 1920,
+          "Height": 1080,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff2758f3",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 1080,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.3800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:02.4000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -1080,
+                        "KeyTime": "00:00:02.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:04.5300000",
+      "Length": "00:00:02.5300000",
+      "ZIndex": 9,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Make it yours. / Make it",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Make it",
+          "Start": "00:00:04.5300000",
+          "Duration": "00:00:02.5300000",
+          "ZIndex": 9,
+          "Size": 220,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": 0,
+          "SplitByCharacters": false,
+          "Text": "Make it",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#fff3efe6",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -1850,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -350,
+                        "KeyTime": "00:00:00.5300000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -242,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -242,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -1322,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": -350,
+                "Y": -242,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:04.5300000",
+      "Length": "00:00:02.5300000",
+      "ZIndex": 10,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Make it yours. / Card",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Make it yours. / Card",
+          "Start": "00:00:04.5300000",
+          "Duration": "00:00:02.5300000",
+          "ZIndex": 10,
+          "Width": 1370,
+          "Height": 390,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#fff3efe6",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "Rotation": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 13,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -5,
+                        "KeyTime": "00:00:00.6200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -4,
+                        "KeyTime": "00:00:00.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 2000,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 55,
+                        "KeyTime": "00:00:00.6000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 80,
+                        "KeyTime": "00:00:00.7800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 135,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 95,
+                        "KeyTime": "00:00:00.7000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 95,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -985,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 80,
+                "Y": 95,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:04.5300000",
+      "Length": "00:00:02.5300000",
+      "ZIndex": 11,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Make it yours. / yours.",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "yours.",
+          "Start": "00:00:04.5300000",
+          "Duration": "00:00:02.5300000",
+          "ZIndex": 11,
+          "Size": 376,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": -6,
+          "SplitByCharacters": false,
+          "Text": "yours.",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff181a1d",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "Rotation": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 13,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -5,
+                        "KeyTime": "00:00:00.6200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -4,
+                        "KeyTime": "00:00:00.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 2008,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 63,
+                        "KeyTime": "00:00:00.6000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 88,
+                        "KeyTime": "00:00:00.7800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 60,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 20,
+                        "KeyTime": "00:00:00.7000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 20,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -1060,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 88,
+                "Y": 20,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:06.6500000",
+      "Length": "00:00:02.3500000",
+      "ZIndex": 2,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Hero / Create.",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Create.",
+          "Start": "00:00:06.6500000",
+          "Duration": "00:00:02.3500000",
+          "ZIndex": 2,
+          "Animations": {
+            "Opacity": {
+              "UseGlobalClock": false,
+              "Name": "",
+              "KeyFrames": [
+                {
+                  "Value": 0,
+                  "KeyTime": "00:00:00",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                },
+                {
+                  "Value": 0,
+                  "KeyTime": "00:00:00.1300000",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                },
+                {
+                  "Value": 100,
+                  "KeyTime": "00:00:00.6200000",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                }
+              ],
+              "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+            }
+          },
+          "Size": 168,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": 0,
+          "SplitByCharacters": false,
+          "Text": "Create.",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff181a1d",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 260,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 182,
+                        "KeyTime": "00:00:00.7400000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 182,
+                "Y": -250,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 0,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:06.6500000",
+      "Length": "00:00:02.3500000",
+      "ZIndex": 3,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Hero / Animate.",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Animate.",
+          "Start": "00:00:06.6500000",
+          "Duration": "00:00:02.3500000",
+          "ZIndex": 3,
+          "Animations": {
+            "Opacity": {
+              "UseGlobalClock": false,
+              "Name": "",
+              "KeyFrames": [
+                {
+                  "Value": 0,
+                  "KeyTime": "00:00:00",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                },
+                {
+                  "Value": 0,
+                  "KeyTime": "00:00:00.2000000",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                },
+                {
+                  "Value": 100,
+                  "KeyTime": "00:00:00.7200000",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                }
+              ],
+              "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+            }
+          },
+          "Size": 168,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": 0,
+          "SplitByCharacters": false,
+          "Text": "Animate.",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff181a1d",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 260,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 182,
+                        "KeyTime": "00:00:00.8100000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 182,
+                "Y": -55,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 0,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:06.6500000",
+      "Length": "00:00:02.3500000",
+      "ZIndex": 4,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Hero / Make it yours.",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Make it yours.",
+          "Start": "00:00:06.6500000",
+          "Duration": "00:00:02.3500000",
+          "ZIndex": 4,
+          "Animations": {
+            "Opacity": {
+              "UseGlobalClock": false,
+              "Name": "",
+              "KeyFrames": [
+                {
+                  "Value": 0,
+                  "KeyTime": "00:00:00",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                },
+                {
+                  "Value": 0,
+                  "KeyTime": "00:00:00.2700000",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                },
+                {
+                  "Value": 100,
+                  "KeyTime": "00:00:00.8200000",
+                  "Name": "",
+                  "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                  "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                }
+              ],
+              "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+            }
+          },
+          "Size": 220,
+          "FontFamily": "Inter 28pt",
+          "FontStyle": 0,
+          "FontWeight": 900,
+          "Spacing": 0,
+          "SplitByCharacters": false,
+          "Text": "Make it yours.",
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff2758f3",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 260,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 182,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 182,
+                "Y": 230,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 0,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:TextBlock"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:06.6500000",
+      "Length": "00:00:02.3500000",
+      "ZIndex": 1,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Hero / Blue rule",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Hero / Blue rule",
+          "Start": "00:00:06.6500000",
+          "Duration": "00:00:02.3500000",
+          "ZIndex": 1,
+          "Width": 8,
+          "Height": 700,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#ff2758f3",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "ScaleY": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 100,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "X": -820,
+                "Y": 22,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    },
+    {
+      "Start": "00:00:08.5000000",
+      "Length": "00:00:00.5000000",
+      "ZIndex": 12,
+      "IsEnabled": true,
+      "IsLocked": false,
+      "Name": "Loop / Ivory wipe",
+      "Objects": [
+        {
+          "IsEnabled": true,
+          "Name": "Loop / Ivory wipe",
+          "Start": "00:00:08.5000000",
+          "Duration": "00:00:00.5000000",
+          "ZIndex": 12,
+          "Width": 1920,
+          "Height": 1080,
+          "Pen": null,
+          "Fill": {
+            "IsEnabled": true,
+            "Name": "",
+            "Color": "#fff3efe6",
+            "Opacity": 100,
+            "Transform": null,
+            "TransformOrigin": "50%, 50%",
+            "$type": "[Beutl.Engine]Beutl.Media:SolidColorBrush"
+          },
+          "Transform": {
+            "IsEnabled": true,
+            "Name": "",
+            "Children": [
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -1920,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.5000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              }
+            ],
+            "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
+          },
+          "AlignmentX": 1,
+          "AlignmentY": 1,
+          "TransformOrigin": "50%, 50%",
+          "FilterEffect": null,
+          "BlendMode": 3,
+          "Opacity": 100,
+          "$type": "[Beutl.Engine]Beutl.Graphics.Shapes:RectShape"
+        }
+      ],
+      "$type": "[Beutl.ProjectSystem]:Element"
+    }
+  ]
+}
