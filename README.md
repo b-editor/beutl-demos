@@ -31,8 +31,8 @@ logical pixels including the title bar, at 2× Retina scale** (2940×1912 pixels
 total). `WindowWidth`, `WindowHeight`, and `RenderScale` in `config/camera.json`
 control this layout independently of the fixed 1920×1080 delivery format. The
 window keeps its aspect ratio when composed over the wallpaper.
-Inspector operations use 1.35× camera zoom. The default keeps graph editing at
-overview scale; `config/camera-graph-zoom.json` also frames the graph at 1.35×.
+The default uses 1.35× camera zoom for inspector and graph editing.
+`config/camera-overview.json` keeps graph editing at overview scale for comparison.
 Both profiles use stable panel targets and return to the overview for playback.
 
 `preview` replays the complete workflow at 2× DPI, saves full-resolution checkpoints
@@ -74,9 +74,9 @@ python3 scripts/demo.py prepare --source /path/to/beutl
 # Reuse an already-built checkout when only changing camera settings.
 python3 scripts/demo.py camera --no-build --capture captures/hero-...
 
-# Compare graph zoom using the same captured input, without replaying the editor.
+# Compare the graph overview using the same captured input, without replaying the editor.
 python3 scripts/demo.py camera --no-build --capture captures/hero-... \
-  --settings config/camera-graph-zoom.json
+  --settings config/camera-overview.json
 
 # Independently compare a saved project with the original MCP composition.
 python3 scripts/demo.py verify --no-build --capture captures/hero-...
@@ -101,6 +101,10 @@ python3 scripts/demo.py web-assets \
 This prepares the H.264 MP4, VP9 WebM and a PNG of the video's first frame, checks
 duration and asset size, and decodes both videos before replacing
 `apps/web/public/img/showcase.{mp4,webm}` and `showcase-poster.png`.
+To meet the 25 MiB asset limit, oversized MP4s use H.264 CRF 20 then 22 if needed;
+WebM uses VP9 CRF 32, 34, then 36. The first setting within the limit is retained.
+Resolution and timing stay unchanged; the master recording is preserved. The
+helper fails without replacing existing assets if either video still exceeds the limit.
 The landing page's media dimensions must be 1920×1080. The helper does not commit,
 push or deploy the website; review those three assets together.
 

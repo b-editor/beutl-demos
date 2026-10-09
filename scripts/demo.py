@@ -14,6 +14,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 PROJECT = "tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj"
 SCENARIO = "Beutl.HeadlessUITests.Demos.HeroDemoCaptureTests."
+WEB_ASSET_LIMIT = 25 * 1024 * 1024
 
 
 def run(args, *, cwd=None, env=None, capture=False):
@@ -117,20 +118,39 @@ def web_assets(args):
     if not destination.is_dir():
         raise ValueError("--web must name a beutl-web checkout.")
     ffmpeg = os.environ.get("BEUTL_DEMO_FFMPEG", "ffmpeg")
+
+    def encode_within_limit(output, codec_options, quality_levels):
+        for quality in quality_levels:
+            run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-y", "-i", source,
+                 "-map", "0:v:0", "-an", "-fps_mode", "passthrough", *codec_options,
+                 "-crf", str(quality), "-pix_fmt", "yuv420p", output])
+            size = output.stat().st_size
+            print(f"{output.name}: CRF {quality}, {size / (1024 * 1024):.2f} MiB", flush=True)
+            if size <= WEB_ASSET_LIMIT:
+                return
+        raise RuntimeError(f"{output.name} exceeds the 25 MiB limit at the supported quality settings.")
+
     with tempfile.TemporaryDirectory(dir=destination, prefix=".showcase-") as temporary:
         work = Path(temporary)
-        shutil.copy2(source, work / "showcase.mp4")
-        run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-i", source,
-             "-map", "0:v:0", "-an", "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "32",
-             "-deadline", "good", "-cpu-used", "4", "-row-mt", "1", "-threads", "8",
-             "-pix_fmt", "yuv420p", work / "showcase.webm"])
-        run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-i", source,
+        if source.stat().st_size <= WEB_ASSET_LIMIT:
+            shutil.copy2(source, work / "showcase.mp4")
+        else:
+            encode_within_limit(work / "showcase.mp4",
+                                ["-c:v", "libx264", "-preset", "slow", "-movflags", "+faststart"],
+                                [20, 22])
+        encode_within_limit(work / "showcase.webm",
+                            ["-c:v", "libvpx-vp9", "-b:v", "0", "-deadline", "good",
+                             "-cpu-used", "4", "-row-mt", "1", "-threads", "8"], [32, 34, 36])
+        run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-i", work / "showcase.mp4",
              "-frames:v", "1", "-update", "1", work / "showcase-poster.png"])
-        webm = probe(work / "showcase.webm")
-        if abs(float(webm["format"]["duration"]) - float(media["format"]["duration"])) > 1 / 30:
-            raise RuntimeError("WebM timing changed during encoding.")
         for name in ["showcase.mp4", "showcase.webm"]:
-            if (work / name).stat().st_size > 25 * 1024 * 1024:
+            encoded = probe(work / name)
+            video = encoded["streams"][0]
+            if (video["width"], video["height"], video["r_frame_rate"]) != (1920, 1080, "30/1"):
+                raise RuntimeError(f"{name} dimensions or frame rate changed during encoding.")
+            if abs(float(encoded["format"]["duration"]) - float(media["format"]["duration"])) > 1 / 30:
+                raise RuntimeError(f"{name} timing changed during encoding.")
+            if (work / name).stat().st_size > WEB_ASSET_LIMIT:
                 raise RuntimeError(f"{name} exceeds the 25 MiB static-asset limit.")
             run([ffmpeg, "-hide_banner", "-v", "error", "-xerror", "-i", work / name,
                  "-map", "0:v:0", "-an", "-f", "null", "-"])
