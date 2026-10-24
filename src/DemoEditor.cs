@@ -17,6 +17,7 @@ using Beutl.Editor.Components.GraphEditorTab.Views;
 using Beutl.Editor.Components.TimelineTab.ViewModels;
 using Beutl.Editor.Components.TimelineTab.Views;
 using Beutl.Editor.Services;
+using Beutl.Editor.PropertyEditors;
 using Beutl.Editor.Components.ElementPropertyTab.Views;
 using Beutl.Editor.Components.Helpers;
 using Beutl.Extensibility;
@@ -30,9 +31,9 @@ using Beutl.Testing.Headless;
 using Beutl.ViewModels;
 using Beutl.ViewModels.Dock;
 using Dock.Avalonia.Controls;
-using Beutl.ViewModels.Editors;
+using Beutl.Editor.Components.PropertyEditors.ViewModels;
 using Beutl.Views;
-using Beutl.Views.Editors;
+using Beutl.Editor.Components.PropertyEditors.Views;
 using Path = Avalonia.Controls.Shapes.Path;
 
 namespace Beutl.HeadlessUITests.Demos;
@@ -85,7 +86,7 @@ internal sealed class DemoEditor
     public TimelineTabViewModel Timeline => _editor.FindToolTab<TimelineTabViewModel>()
         ?? throw new InvalidOperationException("The editor's Timeline tab is missing.");
 
-    public Element Element(string name) => _editor.Scene.Children.Single(e => e.Name == name);
+    public Element Element(string name) => _editor.Scene.Children.Single(e => e.Name.Value == name);
 
     public ValueTask<bool> SaveAsync() => _editor.SaveAsync();
 
@@ -136,7 +137,7 @@ internal sealed class DemoEditor
         await RenderThread.Dispatcher.InvokeAsync(() => { });
         var rendered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         using var subscription = _editor.Player.AfterRendered.Subscribe(_ => rendered.TrySetResult());
-        _editor.Player.CurrentFrame.Value = TimeSpan.FromSeconds(seconds);
+        _editor.Player.CurrentFrame.Value = MediaTime.FromSeconds(seconds);
         _editor.Player.QueuePreviewRender();
         await rendered.Task.WaitAsync(TimeSpan.FromSeconds(15));
         if (_editor.Player.PreviewRenderError.Value is { } error) throw new InvalidOperationException(error);
@@ -269,6 +270,9 @@ internal sealed class DemoEditor
         ListBoxItem? item = FindClipping();
         if (item == null)
         {
+            ToggleButton searchToggle = picker.GetVisualDescendants().OfType<ToggleButton>()
+                .Single(t => t.Name == "ShowSearchBoxButton");
+            if (searchToggle.IsChecked != true) await ClickAsync(searchToggle, recorder);
             TextBox search = picker.GetVisualDescendants().OfType<TextBox>().Single(t => t.Name == "SearchTextBox");
             await ClickAsync(search, recorder);
             foreach (char character in "Clipping")
@@ -284,8 +288,21 @@ internal sealed class DemoEditor
             HeadlessTestHelpers.Settle();
             item = FindClipping() ?? throw new InvalidOperationException("Clipping was not found in the effect picker.");
         }
+        var list = picker.GetVisualDescendants().OfType<ListBox>().Single(v => v.Name == "PART_ListBox");
+        var scroll = list.GetVisualDescendants().OfType<ScrollViewer>().Single();
+        for (int attempt = 0; attempt < 20; attempt++)
+        {
+            double y = item.TranslatePoint(new Point(0, item.Bounds.Height / 2), scroll)!.Value.Y;
+            if (y >= item.Bounds.Height / 2 && y <= scroll.Viewport.Height - item.Bounds.Height / 2) break;
+            await PointAtAsync(list, recorder);
+            Window.MouseWheel(_pointer, new Avalonia.Vector(0, y < 0 ? 1 : -1));
+            await recorder.TransitionAsync(0.2);
+            item = FindClipping() ?? throw new InvalidOperationException("Clipping disappeared while scrolling the picker.");
+        }
         await recorder.HoldAsync(0.8);
         await ClickAsync(item, recorder);
+        Assert.That(picker.SelectedItem?.UserData,
+            Is.InstanceOf<SingleTypeLibraryItem>().And.Property(nameof(SingleTypeLibraryItem.ImplementationType)).EqualTo(typeof(Clipping)));
         await recorder.CheckpointAsync("effect-picker");
         Button accept = picker.GetVisualDescendants().OfType<Button>().Single(b => b.Name == "AcceptButton");
         await ClickAsync(accept, recorder);
@@ -302,7 +319,7 @@ internal sealed class DemoEditor
     public async Task AddKeyframeAsync(Guid owner, string name, HeadlessVideoRecorder recorder)
     {
         PropertyEditorMenu menu = PropertyMenu(owner, name);
-        var vm = (BaseEditorViewModel)menu.DataContext!;
+        var vm = (PropertyEditorViewModel)menu.DataContext!;
         Button button = menu.GetVisualDescendants().OfType<Button>().Single();
         if (!vm.HasAnimation.Value)
         {
@@ -321,10 +338,10 @@ internal sealed class DemoEditor
             Button insert = Window.GetVisualDescendants().OfType<Button>().Single(b =>
                 b.IsEffectivelyVisible && b.Classes.Contains("graph-animation")
                 && b.DataContext is GraphEditorTreeItemViewModel item
-                && item.Property is { } property && property.Name == name && property.GetOwnerObject()?.Id == owner);
+                && item.Property is { } property && property.Name == name && property.GetOwnerObject()?.Id.Value == owner);
             var item = (GraphEditorTreeItemViewModel)insert.DataContext!;
             Assert.That(item.HasKeyFrame.Value, Is.False, "The tree button must insert, not remove, a key.");
-            int count = ((KeyFrameAnimation)item.Animation!).KeyFrames.Count;
+            int count = item.Animation!.KeyFrames.Count;
             await PointAtAsync(insert, recorder);
             if (_pointer.Y > Window.ClientSize.Height - 40)
             {
@@ -340,7 +357,7 @@ internal sealed class DemoEditor
             Assert.That(clicked, Is.True,
                 $"Graph tree button did not receive the click at {_pointer}; hit: {Window.InputHitTest(_pointer)?.GetType().Name}.");
             Assert.That(_pointer.Y, Is.LessThanOrEqualTo(Window.ClientSize.Height - 32));
-            Assert.That(((KeyFrameAnimation)item.Animation!).KeyFrames.Count, Is.EqualTo(count + 1),
+            Assert.That(item.Animation!.KeyFrames.Count, Is.EqualTo(count + 1),
                 $"CanAnimate={item.CanAnimate.Value}, selectedGraph={_graph.SelectedAnimation.Value != null}, currentItem={ReferenceEquals(insert.DataContext, item)}.");
             Assert.That(item.HasKeyFrame.Value, Is.True);
             await recorder.CheckpointAsync($"{name}-tree-key-{count + 1}");
@@ -349,9 +366,9 @@ internal sealed class DemoEditor
 
     public PropertyEditorMenu PropertyMenu(Guid owner, string name) => Window.GetVisualDescendants()
         .OfType<PropertyEditorMenu>().Single(v => v.IsEffectivelyVisible
-            && v.DataContext is BaseEditorViewModel vm
+            && v.DataContext is PropertyEditorViewModel vm
             && vm.PropertyAdapter.GetEngineProperty() is { } property
-            && property.Name == name && property.GetOwnerObject()?.Id == owner);
+            && property.Name == name && property.GetOwnerObject()?.Id.Value == owner);
 
     public async Task TypePropertyAsync(Guid owner, string name, string value, HeadlessVideoRecorder recorder)
     {
@@ -372,7 +389,7 @@ internal sealed class DemoEditor
         Window.KeyReleaseQwerty(PhysicalKey.Enter, modifiers);
         Assert.That(input.IsKeyboardFocusWithin, Is.False, "Enter must commit the edit.");
         HeadlessTestHelpers.Settle();
-        await SeekAsync(_editor.Player.CurrentFrame.Value.TotalSeconds);
+        await SeekAsync(_editor.Player.CurrentFrame.Value.ToSeconds());
         await recorder.HoldAsync(0.8);
     }
 
@@ -405,7 +422,7 @@ internal sealed class DemoEditor
                     // Whole-pixel deltas prevent float noise from appearing in the live value.
                     MovePointer(start + new Avalonia.Vector(Math.Round((end.X - start.X) * t), 0));
                     Window.MouseMove(_pointer, RawInputModifiers.LeftMouseButton | modifiers);
-                    await SeekAsync(_editor.Player.CurrentFrame.Value.TotalSeconds);
+                    await SeekAsync(_editor.Player.CurrentFrame.Value.ToSeconds());
                     await recorder.FrameAsync();
                 }
                 Assert.That(field.Value, Is.EqualTo(adjustment.Value).Within(0.001), $"{name} must change through the header drag.");
@@ -427,7 +444,7 @@ internal sealed class DemoEditor
         float scale = graph?.DataContext is GraphEditorViewModel model ? model.Options.Value.Scale : Timeline.Options.Value.Scale;
         ScrollViewer scroll = view.FindControl<ScrollViewer>(graph != null ? "scroll" : "ContentScroll")!;
         Border ruler = view.FindControl<Border>("RulerBar")!;
-        double x = TimeSpan.FromSeconds(seconds).TimeToPixel(scale) - scroll.Offset.X;
+        double x = MediaTime.FromSeconds(seconds).TimeToPixel(scale) - scroll.Offset.X;
         if (x < 0 || x > ruler.Bounds.Width - 4)
             throw new InvalidOperationException("The fixed timeline range must contain every recorded edit.");
         await PointAtAsync(ruler, recorder, new Point(Math.Clamp(x, 1, ruler.Bounds.Width - 4), 22));
@@ -451,7 +468,7 @@ internal sealed class DemoEditor
         await recorder.HoldAsync(0.8);
         ScrollViewer scroll = view.FindControl<ScrollViewer>("scroll")!;
         TestContext.Progress.WriteLine($"Graph fit: scale={model.Options.Value.Scale}, offset={scroll.Offset}, optionOffset={model.Options.Value.Offset}, margin={model.Margin.Value}, panel={model.PanelWidth.Value}, extent={scroll.Extent}, viewport={scroll.Viewport}");
-        double span = (model.Animation.KeyFrames.Last().KeyTime - model.Animation.KeyFrames.First().KeyTime)
+        double span = (model.Animation.KeyFrames.Last().KeyTime.Value - model.Animation.KeyFrames.First().KeyTime.Value)
             .TimeToPixel(model.Options.Value.Scale);
         Assert.That(span, Is.GreaterThan(scroll.Viewport.Width * 0.8), "Fit must use the horizontal plot area too.");
         foreach (Path key in view.GetVisualDescendants().OfType<Path>().Where(p => p.Name == "KeyTimeIcon"))
@@ -495,7 +512,7 @@ internal sealed class DemoEditor
         GraphEditorView view = Window.GetVisualDescendants().OfType<GraphEditorView>().Single(v => v.IsEffectivelyVisible);
         var model = (GraphEditorViewModel)view.DataContext!;
         var item = model.SelectedView.Value!.KeyFrames[segmentIndex];
-        var spline = (SplineEasing)item.Model.Easing;
+        var spline = (SplineEasing)item.Model.Easing.Value;
         Path handle = view.GetVisualDescendants().OfType<Path>().Single(p =>
             ReferenceEquals(p.DataContext, item) && Equals(p.Tag, incoming ? "ControlPoint2" : "ControlPoint1"));
         Assert.That(handle.IsEffectivelyVisible, Is.True);
@@ -528,7 +545,7 @@ internal sealed class DemoEditor
                     Assert.That(paired.X, Is.EqualTo(-driver.X).Within(0.00001), "The opposite handle must follow each drag frame.");
                     Assert.That(paired.Y, Is.EqualTo(-driver.Y).Within(0.001));
                 }
-                await SeekAsync(_editor.Player.CurrentFrame.Value.TotalSeconds);
+                await SeekAsync(_editor.Player.CurrentFrame.Value.ToSeconds());
                 await recorder.FrameAsync();
             }
         }
@@ -545,7 +562,7 @@ internal sealed class DemoEditor
         _graphCameraTarget = CenterOf(view);
         var model = (GraphEditorViewModel)view.DataContext!;
         Path key = view.GetVisualDescendants().OfType<Path>().Where(p => p.Name == "KeyTimeIcon")
-            .OrderBy(p => ((GraphEditorKeyFrameViewModel)p.DataContext!).Model.KeyTime).Last();
+            .OrderBy(p => ((GraphEditorKeyFrameViewModel)p.DataContext!).Model.KeyTime.Value).Last();
         var item = (GraphEditorKeyFrameViewModel)key.DataContext!;
         ScrollViewer scroll = view.FindControl<ScrollViewer>("scroll")!;
         double keyY = key.TranslatePoint(default, scroll)!.Value.Y;
@@ -562,10 +579,10 @@ internal sealed class DemoEditor
                 Is.InRange(16, scroll.Viewport.Height - 16));
         }
         // Move the playhead a little before the endpoint so it cannot intercept the diamond.
-        await ScrubAsync(model.Element!.Start.TotalSeconds + item.Model.KeyTime.TotalSeconds - 0.08, recorder);
+        await ScrubAsync(model.Element!.Start.Value.ToSeconds() + item.Model.KeyTime.Value.ToSeconds() - 0.08, recorder);
         await PointAtAsync(key, recorder, default(Point));
         Point start = _pointer;
-        Point end = start + new Avalonia.Vector((TimeSpan.FromSeconds(localTime) - item.Model.KeyTime)
+        Point end = start + new Avalonia.Vector((MediaTime.FromSeconds(localTime) - item.Model.KeyTime.Value)
             .TimeToPixel(model.Options.Value.Scale), 0);
         Window.MouseDown(start, MouseButton.Left);
         Assert.That(view.KeyTimeMoveState?.KeyFrame, Is.SameAs(item.Model));
@@ -578,12 +595,12 @@ internal sealed class DemoEditor
                 t = t * t * (3 - 2 * t);
                 MovePointer(start + (end - start) * t);
                 Window.MouseMove(_pointer, RawInputModifiers.LeftMouseButton | RawInputModifiers.Shift);
-                await SeekAsync(_editor.Player.CurrentFrame.Value.TotalSeconds);
+                await SeekAsync(_editor.Player.CurrentFrame.Value.ToSeconds());
                 await recorder.FrameAsync();
             }
         }
         finally { Window.MouseUp(_pointer, MouseButton.Left); }
-        Assert.That(item.Model.KeyTime, Is.EqualTo(TimeSpan.FromSeconds(localTime)));
+        Assert.That(item.Model.KeyTime.Value, Is.EqualTo(MediaTime.FromSeconds(localTime)));
         Assert.That(Convert.ToSingle(item.Model.Value), Is.EqualTo(475));
         await recorder.HoldAsync(0.5);
     }
@@ -592,7 +609,7 @@ internal sealed class DemoEditor
     {
         Path[] keys = Window.GetVisualDescendants().OfType<Path>()
             .Where(p => p.IsEffectivelyVisible && p.Name == "KeyTimeIcon" && p.DataContext is GraphEditorKeyFrameViewModel)
-            .OrderBy(p => ((GraphEditorKeyFrameViewModel)p.DataContext!).Model.KeyTime).ToArray();
+            .OrderBy(p => ((GraphEditorKeyFrameViewModel)p.DataContext!).Model.KeyTime.Value).ToArray();
         Assert.That(keys.Length, Is.GreaterThanOrEqualTo(3));
         // The playhead overlays the ending diamond. Focus the hold key, then use the native Select All shortcut.
         await ClickAsync(keys[1], recorder, new Point(0, 0));
@@ -620,7 +637,7 @@ internal sealed class DemoEditor
             .Single(t => t.Value.Value is Beutl.Graphics.Transformation.TransformGroup);
         await ExpandAsync(transform);
         TransformEditorViewModel translation = transform.Group.Value!.Items.Select(i => i.Context)
-            .OfType<TransformEditorViewModel>().Single(t => t.Value.Value?.Id == owner);
+            .OfType<TransformEditorViewModel>().Single(t => t.Value.Value?.Id.Value == owner);
         await ExpandAsync(translation);
         HeadlessTestHelpers.Render(2);
 
@@ -668,7 +685,7 @@ internal sealed class DemoEditor
     public void ClearSelection()
     {
         _focusCamera = false;
-        ((IEditorSelection)_editor.GetService(typeof(IEditorSelection))!).SelectedObject.Value = null;
+        ((IEditorSelection)_editor.GetService(typeof(IEditorSelection))!).Select(null);
         Timeline.ClearSelected();
     }
 

@@ -1,9 +1,8 @@
 diff --git a/tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj b/tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj
-index d3e7832c9..8223ee5fb 100644
 --- a/tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj
 +++ b/tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj
-@@ -21,6 +21,8 @@
- 
+@@ -34,6 +34,8 @@
+
    <ItemGroup>
      <Using Include="NUnit.Framework" />
 +    <EmbeddedResource Include="Assets/Demos/hero-editorial.json" />
@@ -12,45 +11,43 @@ index d3e7832c9..8223ee5fb 100644
      <EmbeddedResource Include="..\Beutl.UnitTests\Assets\Font\BeutlTestVariable.ttf" LogicalName="ProjectFontFixture.ttf" />
      <EmbeddedResource Include="..\Beutl.UnitTests\Assets\Font\Roboto-Regular.ttf" LogicalName="ProjectFontSecondFixture.ttf" />
 diff --git a/tests/Beutl.HeadlessUITests/TestApp.axaml.cs b/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
-index 257755df7..3b65ed697 100644
 --- a/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
 +++ b/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
-@@ -26,6 +26,7 @@ public sealed class TestApp : Application
- 
+@@ -16,6 +16,7 @@
+
      public override void Initialize()
      {
 +        TestAppBuilder.ApplyDemoCulture();
          AvaloniaXamlLoader.Load(this);
          App.RegisterBundledEngineFonts();
          // EditView's Timeline tool view (LayerHeader) resolves {StaticResource PaletteColors}, which the
-@@ -35,6 +36,7 @@ public sealed class TestApp : Application
- 
+@@ -25,6 +26,7 @@
+
      public override void RegisterServices()
      {
 +        TestAppBuilder.ApplyDemoCulture();
          base.RegisterServices();
- 
-         PropertyEditorExtension.DefaultHandler = new PropertyEditorService.PropertyEditorExtensionImpl();
+
+         App.RegisterProcessServices(() => GetMainViewModel().ContextCommandManager);
 diff --git a/tests/Beutl.HeadlessUITests/TestAppBuilder.cs b/tests/Beutl.HeadlessUITests/TestAppBuilder.cs
-index cd298bdf3..5094acf95 100644
 --- a/tests/Beutl.HeadlessUITests/TestAppBuilder.cs
 +++ b/tests/Beutl.HeadlessUITests/TestAppBuilder.cs
-@@ -21,6 +21,7 @@ public static class TestAppBuilder
- {
+@@ -23,6 +23,7 @@
+
      public static AppBuilder BuildAvaloniaApp()
      {
 +        ApplyDemoCulture();
          OpenALPreload.EnsureLoaded();
          return AppBuilder.Configure<TestApp>()
              .UseReactiveUI(builder => builder.WithMainThreadScheduler(UiThreadScheduler.Instance))
-@@ -29,4 +30,17 @@ public static class TestAppBuilder
+@@ -31,4 +32,17 @@
              .With<IStorageProviderFactory>(new TestStorageProviderFactory())
-             .UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false });
+             .UseHeadless(HeadlessOptions);
      }
 +
 +    internal static void ApplyDemoCulture()
 +    {
-+        // Set this before loading resources and registering localized library items for a recording.
++        // Set culture before loading resources and registering localized library items.
 +        if (Environment.GetEnvironmentVariable("BEUTL_DEMO_CULTURE") is { Length: > 0 } language)
 +        {
 +            var culture = System.Globalization.CultureInfo.GetCultureInfo(language);
