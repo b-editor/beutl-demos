@@ -90,6 +90,8 @@ def run_scenario(args):
     selection = ("FullyQualifiedName~Demos.DemoCameraMotionTests|"
                  "FullyQualifiedName~Demos.DemoCursorOverlayTests|"
                  "FullyQualifiedName~Demos.DemoGraphFramingTests|"
+                 "FullyQualifiedName~GraphEditorInteractionTests.Fit_all_|"
+                 "FullyQualifiedName~GraphEditorInteractionTests.Ruler_zoom_at_the_time_scale_limit_does_not_pan|"
                  "FullyQualifiedName~Demos.DemoFrameComposerTests") if command == "check" else (
                      "FullyQualifiedName=" + SCENARIO + methods[command])
     invocation = ["dotnet", "test", PROJECT, "-c", "Release", "-f", "net10.0",

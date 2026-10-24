@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Beutl.Animation;
 using Beutl.Animation.Easings;
-using Beutl.Editor.Components.Helpers;
+using Beutl.Editor.Services;
 using Beutl.Engine;
 using Beutl.Graphics;
 using Beutl.Graphics.Effects;
@@ -29,7 +29,7 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
             string type = element!["Objects"]![0]!["$type"]!.GetValue<string>();
             // Match ElementAdderImpl's native accent-color generation by engine-object type.
             string typeName = type[(type.IndexOf(']') + 1)..].Replace(':', '.');
-            element["AccentColor"] = ColorGenerator.GenerateColor(typeName).ToString();
+            element["AccentColor"] = ElementAccentColorGenerator.GenerateColor(typeName).ToString();
         }
         JsonObject create = Object(Create);
         create["Text"] = "Your text";
@@ -54,30 +54,30 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         await ui.OverviewAsync(video, 0.5);
         await ui.SelectAsync(Create, video);
         Describe("Create. — replace the placeholder");
-        await ui.FramePropertyAsync(Root(Create).Id, "Text", video);
-        await ui.TypePropertyAsync(Root(Create).Id, "Text", "Create.", video);
-        Assert.That(((TextBlock)Root(Create)).Text.CurrentValue, Is.EqualTo("Create."));
+        await ui.FramePropertyAsync(Root(Create).Id.Value, "Text", video);
+        await ui.TypePropertyAsync(Root(Create).Id.Value, "Text", "Create.", video);
+        Assert.That(((TextBlock)Root(Create)).Text.Value, Is.EqualTo("Create."));
         await CheckpointAsync("00-type");
 
         Describe("Add Clipping inside the effect group");
         await ui.AddClippingAsync(video);
         await CheckpointAsync("00-effect-group");
-        var clipping = ((FilterEffectGroup)Root(Create).FilterEffect.CurrentValue!).Children.OfType<Clipping>().Single();
-        await ui.FramePropertyAsync(clipping.Id, "Right", video);
+        var clipping = ((FilterEffectGroup)Root(Create).FilterEffect.Value!).Children.OfType<Clipping>().Single();
+        await ui.FramePropertyAsync(clipping.Id.Value, "Right", video);
         Describe("Drag Right until the text is hidden — set the starting pose first");
         await ui.ScrubAsync(0, video);
-        await ui.ScrubPropertyAsync(clipping.Id, "Right", video, new(1380, 2.6), new(1436, 0.85));
-        Assert.That(clipping.Right.Animation, Is.Null);
+        await ui.ScrubPropertyAsync(clipping.Id.Value, "Right", video, new(1380, 2.6), new(1436, 0.85));
+        Assert.That(clipping.Right.GetKeyFrameAnimation(), Is.Null);
         Describe("Enable animation — the starting value becomes the first key");
-        await ui.AddKeyframeAsync(clipping.Id, "Right", video);
+        await ui.AddKeyframeAsync(clipping.Id.Value, "Right", video);
         await video.HoldAsync(0.8);
         AssertKey(clipping, "Right", 0, 1436);
         Describe("At 0.10s, add a hold key with the same value");
         await AddHoldKeyAsync(Create, clipping, "Right", 0.1, 1436);
         Describe("At 0.88s, add a key and drag Right back to reveal the word");
         await ui.ScrubAsync(0.88, video);
-        await ui.AddKeyframeAsync(clipping.Id, "Right", video);
-        await ui.ScrubPropertyAsync(clipping.Id, "Right", video, new(56, 2.6), new(0, 0.9));
+        await ui.AddKeyframeAsync(clipping.Id.Value, "Right", video);
+        await ui.ScrubPropertyAsync(clipping.Id.Value, "Right", video, new(56, 2.6), new(0, 0.9));
         AssertKey(clipping, "Right", 2, 0);
         Assert.That(ui.CapturePointer().Focus, Is.False, "Keyframe entry must keep the whole graph visible.");
         await CheckpointAsync("Right-keys");
@@ -85,8 +85,8 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         await ui.FitGraphAsync(video);
         await CheckpointAsync("Create-graph-fit");
         await ui.ScrubAsync(0.49, video);
-        await ui.AddKeyframeAsync(clipping.Id, "Right", video);
-        Assert.That(((KeyFrameAnimation<float>)clipping.Right.Animation!).KeyFrames[2].Value, Is.EqualTo(718));
+        await ui.AddKeyframeAsync(clipping.Id.Value, "Right", video);
+        Assert.That(((KeyFrameAnimation<float>)clipping.Right.GetKeyFrameAnimation()!).KeyFrames[2].Value, Is.EqualTo(718));
         Describe("Shape the reveal — use symmetric spline handles");
         await ui.PrepareSplineHandlesAsync(video, symmetric: true);
         await ui.DragSplineHandleAsync(2, false, 1f / 3, 0, video, symmetric: true);
@@ -100,22 +100,22 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         Describe("Animate. — hold the word before the zoom");
         await ui.SelectAsync(Animate, video);
         await ui.ScrubAsync(3, video);
-        var scale = (ScaleTransform)((TransformGroup)Root(Animate).Transform.CurrentValue!).Children[0];
-        await ui.ShowTransformAsync(scale.Id, video);
-        await ui.FramePropertyAsync(scale.Id, "Scale", video);
+        var scale = (ScaleTransform)((TransformGroup)Root(Animate).Transform.Value!).Children[0];
+        await ui.ShowTransformAsync(scale.Id.Value, video);
+        await ui.FramePropertyAsync(scale.Id.Value, "Scale", video);
         // 100% is already the desired starting pose. Do not re-enter an unchanged value.
-        Assert.That(scale.Scale.CurrentValue, Is.EqualTo(100));
-        Assert.That(scale.Scale.Animation, Is.Null);
+        Assert.That(scale.Scale.Value, Is.EqualTo(100));
+        Assert.That(scale.Scale.GetKeyFrameAnimation(), Is.Null);
         Describe("Enable Scale animation from the current size");
-        await ui.ScrubAsync(ui.Element(Animate).Start.TotalSeconds, video);
-        await ui.AddKeyframeAsync(scale.Id, "Scale", video);
+        await ui.ScrubAsync(ui.Element(Animate).Start.Value.ToSeconds(), video);
+        await ui.AddKeyframeAsync(scale.Id.Value, "Scale", video);
         await video.HoldAsync(0.8);
         Describe("Add a hold key before the transition");
         await AddHoldKeyAsync(Animate, scale, "Scale", 1.5, 100);
         Describe("Add a key while the word is visible — adjust Scale");
-        await ui.ScrubAsync(ui.Element(Animate).Start.TotalSeconds + 2.0, video);
-        await ui.AddKeyframeAsync(scale.Id, "Scale", video);
-        await ui.ScrubPropertyAsync(scale.Id, "Scale", video, new(500, 2.3), new(475, 0.9));
+        await ui.ScrubAsync(ui.Element(Animate).Start.Value.ToSeconds() + 2.0, video);
+        await ui.AddKeyframeAsync(scale.Id.Value, "Scale", video);
+        await ui.ScrubPropertyAsync(scale.Id.Value, "Scale", video, new(500, 2.3), new(475, 0.9));
         AssertKey(scale, "Scale", 2, 475);
         Assert.That(ui.CapturePointer().Focus, Is.False, "Keyframe entry must keep the whole graph visible.");
         await CheckpointAsync("Scale-keys");
@@ -135,14 +135,14 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         await ui.ScrubAsync(5.6, video);
         await ui.OverviewAsync(video, 0.9);
         await CheckpointAsync("03-card-before");
-        var transforms = (TransformGroup)Root(Yours).Transform.CurrentValue!;
-        var alignment = transforms.Children.OfType<TranslateTransform>().Single(t => t.Name == "Card alignment");
-        await ui.ShowTransformAsync(alignment.Id, video);
-        await ui.FramePropertyAsync(alignment.Id, "Y", video);
+        var transforms = (TransformGroup)Root(Yours).Transform.Value!;
+        var alignment = transforms.Children.OfType<TranslateTransform>().Single(t => t.Name.Value == "Card alignment");
+        await ui.ShowTransformAsync(alignment.Id.Value, video);
+        await ui.FramePropertyAsync(alignment.Id.Value, "Y", video);
         Describe("Drag Y — compare the spacing above and below the word");
-        await ui.ScrubPropertyAsync(alignment.Id, "Y", video, new(-8, 1.7), new(0, 0.9));
-        Assert.That(alignment.Y.CurrentValue, Is.EqualTo(0).Within(0.001));
-        Assert.That(alignment.Y.Animation, Is.Null);
+        await ui.ScrubPropertyAsync(alignment.Id.Value, "Y", video, new(-8, 1.7), new(0, 0.9));
+        Assert.That(alignment.Y.Value, Is.EqualTo(0).Within(0.001));
+        Assert.That(alignment.Y.GetKeyFrameAnimation(), Is.Null);
         await ReviewAsync("03-card", 4.6, 6.5);
 
         await ui.ShowTimelineAsync(video);
@@ -160,21 +160,21 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
 
     private async Task AddHoldKeyAsync(string element, EngineObject owner, string property, double time, float value)
     {
-        await ui.ScrubAsync(ui.Element(element).Start.TotalSeconds + time, video);
-        await ui.AddKeyframeAsync(owner.Id, property, video);
+        await ui.ScrubAsync(ui.Element(element).Start.Value.ToSeconds() + time, video);
+        await ui.AddKeyframeAsync(owner.Id.Value, property, video);
         AssertKey(owner, property, 1, value);
         await video.HoldAsync(0.9);
     }
 
     private void AssertCursorMatchesReveal(Clipping clipping)
     {
-        var reveal = (KeyFrameAnimation<float>)clipping.Right.Animation!;
-        var cursor = (TranslateTransform)((TransformGroup)Root("Create. / Blue cursor").Transform.CurrentValue!).Children[2];
-        var cursorAnimation = (KeyFrameAnimation<float>)cursor.X.Animation!;
+        var reveal = (KeyFrameAnimation<float>)clipping.Right.GetKeyFrameAnimation()!;
+        var cursor = (TranslateTransform)((TransformGroup)Root("Create. / Blue cursor").Transform.Value!).Children[2];
+        var cursorAnimation = (KeyFrameAnimation<float>)cursor.X.GetKeyFrameAnimation()!;
         // Supporting artwork is prepared with the final timing; no hidden cursor edit during the demo.
         for (int sample = 0; sample <= 100; sample++)
         {
-            TimeSpan time = TimeSpan.FromSeconds(sample * 0.009);
+            MediaTime time = MediaTime.FromSeconds(sample * 0.009);
             float cursorStart = Convert.ToSingle(cursorAnimation.KeyFrames[0].Value);
             float cursorEnd = Convert.ToSingle(cursorAnimation.KeyFrames.Last().Value);
             float progress = (cursorAnimation.Interpolate(time) - cursorStart) / (cursorEnd - cursorStart);
@@ -184,7 +184,7 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
 
     private static void AssertKey(EngineObject owner, string property, int index, float value)
     {
-        var animation = (KeyFrameAnimation)owner.Properties.Single(p => p.Name == property).Animation!;
+        var animation = (IKeyFrameAnimation)owner.Properties.Single(p => p.Name == property).GetKeyFrameAnimation()!;
         Assert.That(animation.KeyFrames.Count, Is.EqualTo(index + 1));
         Assert.That(Convert.ToSingle(animation.KeyFrames[index].Value, CultureInfo.InvariantCulture), Is.EqualTo(value).Within(0.001));
     }
