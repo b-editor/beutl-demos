@@ -14,15 +14,15 @@ internal static class DemoReferenceVerifier
 {
     public static async Task VerifyAsync(Scene edited, IEnumerable<JsonObject> templates, string output)
     {
-        var reference = new Scene(1920, 1080, "Original MCP composition") { Duration = TimeSpan.FromSeconds(9) };
+        var reference = new Scene(1920, 1080, "Original MCP composition") { Duration = { Value = MediaTime.FromSeconds(9) } };
         foreach (JsonObject template in templates)
             reference.Children.Add((Element)CoreSerializer.DeserializeFromJsonObject(template, typeof(Element)));
         var project = new Project();
-        project.Variables[ProjectVariableKeys.FrameRate] = "30";
+        project.FrameRate.Value = new Rational(30);
         project.Items.Add(reference);
         // Animation owners resolve local clocks when attached to an application hierarchy,
         // exactly as the production MCP renderer attaches its isolated scene snapshots.
-        _ = new BeutlApplication { Project = project };
+        _ = new BeutlApplication { Project = { Value = project } };
         // Keep the original animation times and easings as the oracle, including subframe keys.
         await using var video = new DemoVideoEncoder(Path.Combine(output, "hero-final.mp4"), 1920, 1080, 30, "bgra");
         using var expectedHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
@@ -36,7 +36,7 @@ internal static class DemoReferenceVerifier
                 int current = frame;
                 byte[] pixels = await RenderThread.Dispatcher.InvokeAsync(() =>
                 {
-                    TimeSpan time = TimeSpan.FromSeconds(current / 30d);
+                    MediaTime time = MediaTime.FromFrames(current, new Rational(30));
                     expected.Render(expected.Compositor.EvaluateGraphics(time));
                     actual.Render(actual.Compositor.EvaluateGraphics(time));
                     using Bitmap rawA = expected.Snapshot();

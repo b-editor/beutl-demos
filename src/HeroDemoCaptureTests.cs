@@ -28,7 +28,7 @@ public sealed class HeroDemoCaptureTests
     {
         Assert.That(Environment.GetEnvironmentVariable("BEUTL_DEMO_CULTURE"), Is.EqualTo("en-US"),
             "Set BEUTL_DEMO_CULTURE=en-US before starting the recorder so the UI and library initialize in English.");
-        GpuTestGate.EnsureAvailable();
+        Assert.That(TestGpu.IsAvailable, Is.True, TestGpu.UnavailableReason);
         await TestReset.ResetShellAsync();
         RegisterDemoFont();
         string parent = Environment.GetEnvironmentVariable("BEUTL_DEMO_OUTPUT_DIR")
@@ -49,7 +49,7 @@ public sealed class HeroDemoCaptureTests
 
         Application.Current!.RequestedThemeVariant = ThemeVariant.Dark;
         Application.Current.Styles.OfType<FluentAvaloniaTheme>().Single().CustomAccentColor = BeutlDarkBorderTheme.AccentColor;
-        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync(output);
+        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync();
         string fontFamily = templates["Create. / Mask reveal"]["Objects"]![0]!["FontFamily"]!.GetValue<string>();
         JsonNode fonts = await mcp.CallAsync("list_fonts", new() { ["nameFilter"] = fontFamily });
         Assert.That(fonts["families"]!.AsArray().Any(f => f!["name"]!.GetValue<string>() == fontFamily
@@ -57,16 +57,16 @@ public sealed class HeroDemoCaptureTests
             Is.True, $"The bundled {fontFamily} Black (weight 900) must be registered before recording. Runtime font catalog: {fonts}");
         await mcp.CallAsync("create_project", new()
         {
-            ["path"] = "Hero Editorial Wipe.bep",
+            ["path"] = System.IO.Path.Combine(output, "Hero Editorial Wipe.bep"),
             ["width"] = 1920,
             ["height"] = 1080,
             ["frameRate"] = 100,
             ["duration"] = "00:00:09"
         });
-        JsonNode attached = await mcp.CallAsync("attach_active_editor");
-        Assert.That(attached["source"]!.GetValue<string>(), Is.EqualTo("LiveEditor"));
+        JsonNode scenes = await mcp.CallAsync("list_scenes");
+        string sceneId = scenes["activeSceneId"]!.GetValue<string>();
         // The LP walkthrough explicitly starts from a prepared layout, not a new-project tutorial.
-        await mcp.EditAsync(DemoWorkflow.StartingLayout(templates));
+        await mcp.EditAsync(sceneId, DemoWorkflow.StartingLayout(templates));
         int titleBarHeight = 0;
         if (camera.TitleBarPath != null)
         {
@@ -82,11 +82,11 @@ public sealed class HeroDemoCaptureTests
         }
         var editor = (EditViewModel)TestShell.Editor.SelectedTabItem.Value!.Context.Value;
         foreach (var element in editor.Scene.Children)
-            Assert.That(element.AccentColor, Is.EqualTo(Beutl.Editor.Components.Helpers.ColorGenerator.GenerateColor(
+            Assert.That(element.AccentColor.Value, Is.EqualTo(Beutl.Editor.Services.ElementAccentColorGenerator.GenerateColor(
                 element.Objects[0].GetType().FullName!)));
-        bool pointerLock = Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty;
+        bool pointerLock = Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty.Value;
         // Native pointer lock reads the physical mouse, which must never be touched by a headless capture.
-        Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty = false;
+        Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty.Value = false;
         int contentHeight = camera.WindowHeight - titleBarHeight;
         Assert.That(contentHeight, Is.GreaterThanOrEqualTo(480), "The title bar must leave room for the editor.");
         var ui = new DemoEditor(editor, camera.WindowWidth, contentHeight, camera.RenderScale);
@@ -132,7 +132,7 @@ public sealed class HeroDemoCaptureTests
         }
         finally
         {
-            Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty = pointerLock;
+            Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty.Value = pointerLock;
             ui.Window.Close();
             await TestReset.ResetShellAsync();
         }
@@ -171,11 +171,10 @@ public sealed class HeroDemoCaptureTests
         await TestReset.ResetShellAsync();
         Application.Current!.RequestedThemeVariant = ThemeVariant.Dark;
         Application.Current.Styles.OfType<FluentAvaloniaTheme>().Single().CustomAccentColor = BeutlDarkBorderTheme.AccentColor;
-        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync(source);
+        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync();
         try
         {
-            await mcp.CallAsync("open_project", new() { ["path"] = "Hero Editorial Wipe.bep" });
-            await mcp.CallAsync("attach_active_editor");
+            await mcp.CallAsync("open_project", new() { ["path"] = System.IO.Path.Combine(source, "Hero Editorial Wipe.bep") });
             var recording = JsonSerializer.Deserialize<DemoMotionRecording>(await File.ReadAllTextAsync(
                 System.IO.Path.Combine(source, "editor-demo.motion.json")))!;
             DemoMacTitleBar.Capture(System.IO.Path.Combine(output, "macos-titlebar.png"), recording.LogicalWidth, recording.RenderScale);
@@ -196,7 +195,7 @@ public sealed class HeroDemoCaptureTests
     public async Task Verify_manual_spline_equivalence()
     {
         RegisterDemoFont();
-        GpuTestGate.EnsureAvailable();
+        Assert.That(TestGpu.IsAvailable, Is.True, TestGpu.UnavailableReason);
         await TestReset.ResetShellAsync();
         string parent = Environment.GetEnvironmentVariable("BEUTL_DEMO_OUTPUT_DIR")
             ?? TestContext.CurrentContext.WorkDirectory;
@@ -218,16 +217,16 @@ public sealed class HeroDemoCaptureTests
         reveal.Insert(2, middle);
         reveal[3]!["Easing"] = Spline(1);
         Root("Animate. / Zoom")["Transform"]!["Children"]![0]!["Animations"]!["Scale"]!["KeyFrames"]![2]!["Easing"] = Spline(0);
-        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync(output);
+        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync();
         try
         {
             await mcp.CallAsync("create_project", new()
             {
-                ["path"] = "Spline comparison.bep", ["width"] = 1920, ["height"] = 1080,
+                ["path"] = System.IO.Path.Combine(output, "Spline comparison.bep"), ["width"] = 1920, ["height"] = 1080,
                 ["frameRate"] = 100, ["duration"] = "00:00:09"
             });
-            await mcp.CallAsync("attach_active_editor");
-            await mcp.EditAsync(new JsonObject { ["Elements"] = elements });
+            JsonNode scenes = await mcp.CallAsync("list_scenes");
+            await mcp.EditAsync(scenes["activeSceneId"]!.GetValue<string>(), new JsonObject { ["Elements"] = elements });
             var editor = (EditViewModel)TestShell.Editor.SelectedTabItem.Value!.Context.Value;
             await DemoReferenceVerifier.VerifyAsync(editor.Scene, templates, output);
         }
@@ -238,18 +237,17 @@ public sealed class HeroDemoCaptureTests
     public async Task Verify_saved_hero_composition()
     {
         RegisterDemoFont();
-        GpuTestGate.EnsureAvailable();
+        Assert.That(TestGpu.IsAvailable, Is.True, TestGpu.UnavailableReason);
         await TestReset.ResetShellAsync();
         string source = Environment.GetEnvironmentVariable("BEUTL_DEMO_SOURCE_DIR")
             ?? throw new InvalidOperationException("Set BEUTL_DEMO_SOURCE_DIR to the saved capture directory.");
         using Stream resource = typeof(HeroDemoCaptureTests).Assembly.GetManifestResourceStream(
             "Beutl.HeadlessUITests.Assets.Demos.hero-editorial.json")!;
         var templates = JsonNode.Parse(resource)!["Elements"]!.AsArray().Select(n => n!.AsObject()).ToArray();
-        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync(source);
+        await using DemoMcpClient mcp = await DemoMcpClient.StartAsync();
         try
         {
-            await mcp.CallAsync("open_project", new() { ["path"] = "Hero Editorial Wipe.bep" });
-            await mcp.CallAsync("attach_active_editor");
+            await mcp.CallAsync("open_project", new() { ["path"] = System.IO.Path.Combine(source, "Hero Editorial Wipe.bep") });
             var editor = (EditViewModel)TestShell.Editor.SelectedTabItem.Value!.Context.Value;
             string output = System.IO.Path.Combine(source, $"verification-{DateTime.UtcNow:yyyyMMdd-HHmmss}");
             Directory.CreateDirectory(output);

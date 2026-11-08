@@ -1,11 +1,11 @@
 ﻿using System.IO.Pipelines;
 using System.Text.Json.Nodes;
 using Beutl.AgentHost;
+using Beutl.AgentToolkit;
 using Beutl.AgentToolkit.Common;
-using Beutl.AgentToolkit.Rendering;
 using Beutl.AgentToolkit.Sessions;
 using Beutl.AgentToolkit.Tools;
-using Beutl.AgentToolkit.Workspace;
+using Beutl.Extensibility;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -19,7 +19,7 @@ namespace Beutl.HeadlessUITests.Demos;
 // No installed Beutl, listening port, desktop session, or personal MCP configuration is used.
 internal sealed class DemoMcpClient(IHost host, McpClient client, Stream[] streams) : IAsyncDisposable
 {
-    public static async Task<DemoMcpClient> StartAsync(string workspace)
+    public static async Task<DemoMcpClient> StartAsync()
     {
         var requests = new Pipe();
         var responses = new Pipe();
@@ -33,20 +33,21 @@ internal sealed class DemoMcpClient(IHost host, McpClient client, Stream[] strea
         builder.Services
             .AddSingleton(TestShell.Project)
             .AddSingleton(TestShell.Editor)
-            .AddSingleton<LiveSessionSource>()
-            .AddSingleton<AgentSessionManager>()
-            .AddSingleton<IWorkspaceGuard>(new WorkspaceGuard(workspace))
-            .AddSingleton<DestructiveGuard>()
-            .AddSingleton<RenderJobManager>()
-            .AddSingleton<IProjectSessionGateway, EditorProjectSessionGateway>();
+            .AddSingleton<EditorProjectSessionGateway>()
+            .AddSingleton<IProjectSessionGateway>(services => services.GetRequiredService<EditorProjectSessionGateway>())
+            .AddSingleton<CompositionPlanStore>()
+            .AddScoped<AgentSessionManager>()
+            .AddSingleton<IOutputOperationLeaseProvider>(TestShell.Editor)
+            .AddAgentToolkitRendering();
         builder.Services.AddMcpServer()
             .WithStreamServerTransport(streams[1], streams[2])
-            .WithRequestFilters(filters => filters.AddToolkitCallToolErrorFilter())
+            .WithRequestFilters(filters =>
+            {
+                AgentHostSceneRouter.AddFilters(filters);
+                filters.AddToolkitCallToolErrorFilter();
+            })
             .WithTools<AgentHostTools>()
-            .WithTools<SessionTools>()
-            .WithTools<QueryTools>()
-            .WithTools<EditTools>()
-            .WithTools<HistoryTools>();
+            .WithSharedAgentToolkitTools();
         IHost host = builder.Build();
         try
         {
@@ -74,8 +75,9 @@ internal sealed class DemoMcpClient(IHost host, McpClient client, Stream[] strea
         return response["value"]!;
     }
 
-    public Task<JsonNode> EditAsync(JsonObject patch) => CallAsync("apply_edit", new()
+    public Task<JsonNode> EditAsync(string sceneId, JsonObject patch) => CallAsync("apply_edit", new()
     {
+        ["sceneId"] = sceneId,
         ["schemaVersion"] = "1",
         ["patch"] = patch,
         ["quiet"] = true

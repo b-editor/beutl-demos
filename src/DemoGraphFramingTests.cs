@@ -26,13 +26,13 @@ public sealed class DemoGraphFramingTests
         using var graph = await GraphScope.CreateAsync(separateHandles: true, selectAll: false);
         graph.Window.Width = 1200;
         graph.Window.Height = 425.5;
-        graph.Model.Scene.Duration = TimeSpan.FromSeconds(9);
-        graph.Model.Element!.Start = TimeSpan.FromSeconds(elementStart);
-        graph.Model.Element.Length = TimeSpan.FromSeconds(2.45);
-        graph.First.KeyTime = TimeSpan.Zero;
-        graph.Second.KeyTime = TimeSpan.FromSeconds(2.4);
-        graph.Second.Value = 475;
-        graph.Animation.KeyFrames.Insert(1, new KeyFrame<float> { KeyTime = TimeSpan.FromSeconds(1.5), Value = 100 });
+        graph.Model.Scene.Duration.Value = MediaTime.FromSeconds(9);
+        graph.Model.Element!.Start.Value = MediaTime.FromSeconds(elementStart);
+        graph.Model.Element.Length.Value = MediaTime.FromSeconds(2.45);
+        graph.First.KeyTime.Value = MediaTime.Zero;
+        graph.Second.KeyTime.Value = MediaTime.FromSeconds(2.4);
+        graph.Second.Value.Value = 475;
+        graph.Animation.KeyFrames.Insert(1, new KeyFrame<float> { KeyTime = { Value = MediaTime.FromSeconds(1.5) }, Value = { Value = 100 } });
         graph.Model.Options.Value = graph.Model.Options.Value with { Scale = 0.85f };
         // Dock tabs remain mounted while hidden. The inactive timeline must not write
         // an offset clamped against its old extent over the active graph's fit result.
@@ -70,9 +70,10 @@ public sealed class DemoGraphFramingTests
         foreach (var key in graph.Animation.KeyFrames)
         {
             Point center = graph.KeyFrame(key).TranslatePoint(default, scroll)!.Value;
-            Assert.That(center.X, Is.InRange(0, scroll.Viewport.Width - 16), $"Key at {key.KeyTime} must fit horizontally.");
+            Assert.That(center.X, Is.InRange(0, scroll.Viewport.Width - 16), $"Key at {key.KeyTime.Value.ToTimeSpan()} must fit horizontally.");
             Assert.That(center.Y, Is.InRange(16, scroll.Viewport.Height - 16));
         }
-        graph.Capture($"fit-laptop-offset-{elementStart}-{autoHeight}");
+        using var frame = graph.Window.CaptureRenderedFrame();
+        Assert.That(frame, Is.Not.Null);
     }
 }
