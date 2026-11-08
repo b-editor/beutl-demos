@@ -34,10 +34,9 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               },
               {
                 "IsEnabled": true,
@@ -48,9 +47,10 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "X": 0,
-                "Y": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -104,10 +104,9 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+                "X": 4,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               },
               {
                 "IsEnabled": true,
@@ -118,9 +117,10 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "X": 4,
-                "Y": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -210,6 +210,77 @@
                 "IsEnabled": true,
                 "Name": "",
                 "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -716,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -716,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 716,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": -716,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
                   "ScaleY": {
                     "UseGlobalClock": false,
                     "Name": "",
@@ -250,49 +321,6 @@
                 "ScaleX": 100,
                 "ScaleY": 100,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Animations": {
-                  "X": {
-                    "UseGlobalClock": false,
-                    "Name": "",
-                    "KeyFrames": [
-                      {
-                        "Value": -716,
-                        "KeyTime": "00:00:00",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": -716,
-                        "KeyTime": "00:00:00.1000000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 716,
-                        "KeyTime": "00:00:00.8800000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      }
-                    ],
-                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
-                  }
-                },
-                "X": -716,
-                "Y": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -341,20 +369,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -376,11 +390,46 @@
                       }
                     ],
                     "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.4200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
                   }
                 },
                 "X": 0,
                 "Y": 0,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -449,20 +498,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -490,10 +525,62 @@
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       },
                       {
+                        "Value": -81,
+                        "KeyTime": "00:00:01.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -112,
+                        "KeyTime": "00:00:01.7300000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.084889,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.32069,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -192,
+                        "KeyTime": "00:00:01.8600000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.203539,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.516802,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
                         "Value": -480,
                         "KeyTime": "00:00:02.0600000",
                         "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.20268,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.51578,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -480,
+                        "KeyTime": "00:00:02.2500000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.231824,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.553539,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       }
                     ],
@@ -512,16 +599,75 @@
                       },
                       {
                         "Value": -310,
-                        "KeyTime": "00:00:01.5700000",
+                        "KeyTime": "00:00:00.6600000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -310,
+                        "KeyTime": "00:00:01.4800000",
                         "Name": "",
                         "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -310,
+                        "KeyTime": "00:00:01.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -315,
+                        "KeyTime": "00:00:01.7300000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.084889,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.32069,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -339,
+                        "KeyTime": "00:00:01.8600000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.203539,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.516802,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -448,
+                        "KeyTime": "00:00:02.0600000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.20268,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.51578,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       },
                       {
                         "Value": -680,
                         "KeyTime": "00:00:02.2500000",
                         "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.231824,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.553539,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       }
                     ],
@@ -531,6 +677,20 @@
                 "X": -80,
                 "Y": -310,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -585,6 +745,63 @@
                 "IsEnabled": true,
                 "Name": "",
                 "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 1900,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 0,
+                "Y": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
                   "Scale": {
                     "UseGlobalClock": false,
                     "Name": "",
@@ -618,42 +835,6 @@
                 "ScaleX": 100,
                 "ScaleY": 100,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Animations": {
-                  "X": {
-                    "UseGlobalClock": false,
-                    "Name": "",
-                    "KeyFrames": [
-                      {
-                        "Value": 1900,
-                        "KeyTime": "00:00:00",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 0,
-                        "KeyTime": "00:00:00.5700000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      }
-                    ],
-                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
-                  }
-                },
-                "X": 0,
-                "Y": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -722,20 +903,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -763,10 +930,62 @@
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       },
                       {
+                        "Value": 81,
+                        "KeyTime": "00:00:01.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 112,
+                        "KeyTime": "00:00:01.7300000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.084889,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.32069,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 192,
+                        "KeyTime": "00:00:01.8600000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.203539,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.516802,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
                         "Value": 480,
                         "KeyTime": "00:00:02.0600000",
                         "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.20268,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.51578,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 480,
+                        "KeyTime": "00:00:02.2500000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.231824,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.553539,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       }
                     ],
@@ -785,16 +1004,75 @@
                       },
                       {
                         "Value": 310,
-                        "KeyTime": "00:00:01.5700000",
+                        "KeyTime": "00:00:00.7900000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 310,
+                        "KeyTime": "00:00:01.4800000",
                         "Name": "",
                         "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 310,
+                        "KeyTime": "00:00:01.5700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 315,
+                        "KeyTime": "00:00:01.7300000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.084889,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.32069,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 339,
+                        "KeyTime": "00:00:01.8600000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.203539,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.516802,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 448,
+                        "KeyTime": "00:00:02.0600000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.20268,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.51578,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       },
                       {
                         "Value": 680,
                         "KeyTime": "00:00:02.2500000",
                         "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseIn",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.231824,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.553539,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       }
                     ],
@@ -804,6 +1082,20 @@
                 "X": 80,
                 "Y": 310,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -852,21 +1144,42 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.3800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:02.4000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:02.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
                   "Y": {
                     "UseGlobalClock": false,
                     "Name": "",
@@ -906,6 +1219,20 @@
                 "X": 0,
                 "Y": 0,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -959,20 +1286,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -991,6 +1304,20 @@
                         "Name": "",
                         "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -350,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -350,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       }
                     ],
                     "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
@@ -1004,6 +1331,13 @@
                         "KeyTime": "00:00:00",
                         "Name": "",
                         "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -242,
+                        "KeyTime": "00:00:00.5300000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
                         "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
                       },
                       {
@@ -1027,6 +1361,20 @@
                 "X": -350,
                 "Y": -242,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1075,10 +1423,213 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 1918,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 1591,
+                        "KeyTime": "00:00:00.0400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.358971,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.69194,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 1163,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.540224,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.540224,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 630,
+                        "KeyTime": "00:00:00.2000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.411772,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.739908,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 219,
+                        "KeyTime": "00:00:00.3400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.483315,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.796947,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 63,
+                        "KeyTime": "00:00:00.6000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 87,
+                        "KeyTime": "00:00:00.7800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 86,
+                        "KeyTime": "00:00:00.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 86,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 11,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 581,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 403,
+                        "KeyTime": "00:00:00.0400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.358971,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.69194,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 235,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.540224,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.540224,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 116,
+                        "KeyTime": "00:00:00.2000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.411772,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.739908,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 88,
+                        "KeyTime": "00:00:00.3400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.483315,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.796947,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 90,
+                        "KeyTime": "00:00:00.6000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 89,
+                        "KeyTime": "00:00:00.7800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 89,
+                        "KeyTime": "00:00:00.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 89,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -988,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 80,
+                "Y": 95,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               },
               {
                 "IsEnabled": true,
@@ -1119,74 +1670,10 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Animations": {
-                  "X": {
-                    "UseGlobalClock": false,
-                    "Name": "",
-                    "KeyFrames": [
-                      {
-                        "Value": 2000,
-                        "KeyTime": "00:00:00",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 55,
-                        "KeyTime": "00:00:00.6000000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 80,
-                        "KeyTime": "00:00:00.7800000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      }
-                    ],
-                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
-                  },
-                  "Y": {
-                    "UseGlobalClock": false,
-                    "Name": "",
-                    "KeyFrames": [
-                      {
-                        "Value": 135,
-                        "KeyTime": "00:00:00",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 95,
-                        "KeyTime": "00:00:00.7000000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 95,
-                        "KeyTime": "00:00:02.0700000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": -985,
-                        "KeyTime": "00:00:02.5200000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      }
-                    ],
-                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
-                  }
-                },
-                "X": 80,
-                "Y": 95,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1240,10 +1727,213 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
+                "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 1943,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 1612,
+                        "KeyTime": "00:00:00.0400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.358971,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.69194,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 1178,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.540224,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.540224,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 639,
+                        "KeyTime": "00:00:00.2000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.411772,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.739908,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 222,
+                        "KeyTime": "00:00:00.3400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.483315,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.796947,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 65,
+                        "KeyTime": "00:00:00.6000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 89,
+                        "KeyTime": "00:00:00.7800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 89,
+                        "KeyTime": "00:00:00.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 89,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 14,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 510,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 331,
+                        "KeyTime": "00:00:00.0400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.358971,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.69194,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 161,
+                        "KeyTime": "00:00:00.1000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.540224,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.540224,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 41,
+                        "KeyTime": "00:00:00.2000000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.411772,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.739908,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 12,
+                        "KeyTime": "00:00:00.3400000",
+                        "Name": "",
+                        "Easing": {
+                          "X1": 0.3333333333333333,
+                          "Y1": 0.483315,
+                          "X2": 0.6666666666666666,
+                          "Y2": 0.796947,
+                          "$type": "[Beutl.Engine]Beutl.Animation.Easings:SplineEasing"
+                        },
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 15,
+                        "KeyTime": "00:00:00.6000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 14,
+                        "KeyTime": "00:00:00.7800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 14,
+                        "KeyTime": "00:00:00.8500000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 14,
+                        "KeyTime": "00:00:02.0700000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -1064,
+                        "KeyTime": "00:00:02.5200000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": 88,
+                "Y": 20,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               },
               {
                 "IsEnabled": true,
@@ -1284,74 +1974,10 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Animations": {
-                  "X": {
-                    "UseGlobalClock": false,
-                    "Name": "",
-                    "KeyFrames": [
-                      {
-                        "Value": 2008,
-                        "KeyTime": "00:00:00",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 63,
-                        "KeyTime": "00:00:00.6000000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 88,
-                        "KeyTime": "00:00:00.7800000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      }
-                    ],
-                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
-                  },
-                  "Y": {
-                    "UseGlobalClock": false,
-                    "Name": "",
-                    "KeyFrames": [
-                      {
-                        "Value": 60,
-                        "KeyTime": "00:00:00",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 20,
-                        "KeyTime": "00:00:00.7000000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": 20,
-                        "KeyTime": "00:00:02.0700000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      },
-                      {
-                        "Value": -1060,
-                        "KeyTime": "00:00:02.5200000",
-                        "Name": "",
-                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
-                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
-                      }
-                    ],
-                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
-                  }
-                },
-                "X": 88,
-                "Y": 20,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1435,20 +2061,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -1470,11 +2082,46 @@
                       }
                     ],
                     "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -250,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -250,
+                        "KeyTime": "00:00:00.7400000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
                   }
                 },
                 "X": 182,
                 "Y": -250,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1558,20 +2205,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -1593,11 +2226,46 @@
                       }
                     ],
                     "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -55,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -55,
+                        "KeyTime": "00:00:00.8100000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
                   }
                 },
                 "X": 182,
                 "Y": -55,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1681,20 +2349,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -1716,11 +2370,46 @@
                       }
                     ],
                     "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 230,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 230,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
                   }
                 },
                 "X": 182,
                 "Y": 230,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1770,6 +2459,63 @@
                 "IsEnabled": true,
                 "Name": "",
                 "Animations": {
+                  "X": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": -820,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": -820,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 22,
+                        "KeyTime": "00:00:00.8800000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  }
+                },
+                "X": -820,
+                "Y": 22,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Animations": {
                   "ScaleY": {
                     "UseGlobalClock": false,
                     "Name": "",
@@ -1796,19 +2542,6 @@
                 "ScaleX": 100,
                 "ScaleY": 100,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "X": -820,
-                "Y": 22,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"
@@ -1857,20 +2590,6 @@
               {
                 "IsEnabled": true,
                 "Name": "",
-                "Scale": 100,
-                "ScaleX": 100,
-                "ScaleY": 100,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
-                "Rotation": 0,
-                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
-              },
-              {
-                "IsEnabled": true,
-                "Name": "",
                 "Animations": {
                   "X": {
                     "UseGlobalClock": false,
@@ -1892,11 +2611,46 @@
                       }
                     ],
                     "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
+                  },
+                  "Y": {
+                    "UseGlobalClock": false,
+                    "Name": "",
+                    "KeyFrames": [
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:LinearEasing",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      },
+                      {
+                        "Value": 0,
+                        "KeyTime": "00:00:00.5000000",
+                        "Name": "",
+                        "Easing": "[Beutl.Engine]Beutl.Animation.Easings:CubicEaseInOut",
+                        "$type": "[Beutl.Engine]Beutl.Animation:KeyFrame<[System.Private.CoreLib]System:Single>"
+                      }
+                    ],
+                    "$type": "[Beutl.Engine]Beutl.Animation:KeyFrameAnimation<[System.Private.CoreLib]System:Single>"
                   }
                 },
                 "X": 0,
                 "Y": 0,
                 "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Rotation": 0,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:RotationTransform"
+              },
+              {
+                "IsEnabled": true,
+                "Name": "",
+                "Scale": 100,
+                "ScaleX": 100,
+                "ScaleY": 100,
+                "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:ScaleTransform"
               }
             ],
             "$type": "[Beutl.Engine]Beutl.Graphics.Transformation:TransformGroup"

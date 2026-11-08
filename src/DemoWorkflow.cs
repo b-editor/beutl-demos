@@ -35,9 +35,12 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         create["Text"] = "Your text";
         // A new object has no filter; + puts the first effect into a new FilterEffectGroup.
         create.Remove("FilterEffect");
-        Object(Animate)["Transform"]!["Children"]![0]!.AsObject().Remove("Animations");
-        // A separate layout offset lets the designer align the card without disturbing its motion.
-        Object(Yours)["Transform"]!["Children"]!.AsArray().Add(new JsonObject
+        Object(Animate)["Transform"]!["Children"]!.AsArray()
+            .Single(c => c!["$type"]!.GetValue<string>().EndsWith(":ScaleTransform", StringComparison.Ordinal))!
+            .AsObject().Remove("Animations");
+        // A separate layout offset lets the designer align the card without disturbing its motion. It sits beside the
+        // other translation, so the transforms still read Translate, Rotation, Scale from the top.
+        Object(Yours)["Transform"]!["Children"]!.AsArray().Insert(1, new JsonObject
         {
             ["$type"] = "[Beutl.Engine]Beutl.Graphics.Transformation:TranslateTransform",
             ["Name"] = "Card alignment", ["X"] = 0, ["Y"] = 75
@@ -98,7 +101,7 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         Describe("Animate. — hold the word before the zoom");
         await ui.SelectAsync(Animate, video);
         await ui.ScrubAsync(3, video);
-        var scale = (ScaleTransform)((TransformGroup)Root(Animate).Transform.Value!).Children[0];
+        var scale = ((TransformGroup)Root(Animate).Transform.Value!).Children.OfType<ScaleTransform>().Single();
         await ui.ShowTransformAsync(scale.Id.Value, video);
         await ui.FramePropertyAsync(scale.Id.Value, "Scale", video);
         // 100% is already the desired starting pose. Do not re-enter an unchanged value.
@@ -170,7 +173,7 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
     private void AssertCursorMatchesReveal(Clipping clipping)
     {
         var reveal = (KeyFrameAnimation<float>)clipping.Right.GetKeyFrameAnimation()!;
-        var cursor = (TranslateTransform)((TransformGroup)Root("Create. / Blue cursor").Transform.Value!).Children[2];
+        var cursor = ((TransformGroup)Root("Create. / Blue cursor").Transform.Value!).Children.OfType<TranslateTransform>().Single();
         var cursorAnimation = (KeyFrameAnimation<float>)cursor.X.GetKeyFrameAnimation()!;
         // Supporting artwork is prepared with the final timing; no hidden cursor edit during the demo.
         for (int sample = 0; sample <= 100; sample++)
