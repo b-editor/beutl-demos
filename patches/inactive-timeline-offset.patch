@@ -1,13 +1,13 @@
 diff --git a/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs b/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
 --- a/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
 +++ b/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
-@@ -22,7 +22,8 @@
-
-     private void ContentScroll_ScrollChanged(object? sender, ScrollChangedEventArgs e)
+@@ -24,7 +24,8 @@
      {
--        if (ViewModel == null) return;
+         InvalidateElementViewport();
+         // The first layout reports the offset the viewer starts at. OnLoaded has yet to apply the saved one.
+-        if (ViewModel == null || !IsLoaded) return;
 +        // An inactive tab's stale extent must not overwrite the active graph's fitted offset.
-+        if (ViewModel == null || !IsEffectivelyVisible || TopLevel.GetTopLevel(this) == null) return;
++        if (ViewModel == null || !IsLoaded || !IsEffectivelyVisible) return;
          TimelineTabViewModel viewModel = ViewModel;
          Avalonia.Vector aOffset = ContentScroll.Offset;
          var offset = new Vector2((float)aOffset.X, (float)aOffset.Y);

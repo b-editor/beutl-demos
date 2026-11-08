@@ -256,48 +256,34 @@ internal sealed class DemoEditor
         await recorder.TransitionAsync(0.35);
     }
 
-    public async Task AddClippingAsync(HeadlessVideoRecorder recorder)
+    public async Task AddClippingAsync(Guid owner, HeadlessVideoRecorder recorder)
     {
         FilterEffectEditor view = Window.GetVisualDescendants().OfType<FilterEffectEditor>()
-            .Single(v => v.IsEffectivelyVisible && v.DataContext is FilterEffectEditorViewModel { IsGroup.Value: true });
+            .Single(v => v.IsEffectivelyVisible && v.DataContext is FilterEffectEditorViewModel vm
+                && vm.PropertyAdapter.GetEngineProperty() is { } property && property.GetOwnerObject()?.Id.Value == owner);
+        var filter = (FilterEffectEditorViewModel)view.DataContext!;
         ToggleButton toggle = view.FindControl<ToggleButton>("expandToggle")!;
-        if (toggle.IsChecked != true) await ClickAsync(toggle, recorder);
+        // An unset filter has nothing to open: + puts the first effect into a new group.
+        if (filter.Value.Value != null && toggle.IsChecked != true) await ClickAsync(toggle, recorder);
         Button add = toggle.GetVisualDescendants().OfType<Button>().Single(b => b is not ToggleButton && b.IsEffectivelyVisible);
         await ClickAsync(add, recorder);
         LibraryItemPickerFlyoutPresenter picker = Window.GetVisualDescendants().OfType<LibraryItemPickerFlyoutPresenter>().Single();
         ListBoxItem? FindClipping() => picker.GetVisualDescendants().OfType<ListBoxItem>().SingleOrDefault(i =>
             i.DataContext is PinnableLibraryItem { UserData: SingleTypeLibraryItem library } && library.ImplementationType == typeof(Clipping));
-        ListBoxItem? item = FindClipping();
-        if (item == null)
-        {
-            ToggleButton searchToggle = picker.GetVisualDescendants().OfType<ToggleButton>()
-                .Single(t => t.Name == "ShowSearchBoxButton");
-            if (searchToggle.IsChecked != true) await ClickAsync(searchToggle, recorder);
-            TextBox search = picker.GetVisualDescendants().OfType<TextBox>().Single(t => t.Name == "SearchTextBox");
-            await ClickAsync(search, recorder);
-            foreach (char character in "Clipping")
-            {
-                Window.KeyTextInput(character.ToString());
-                await recorder.HoldAsync(0.12);
-            }
-            for (int i = 0; i < 30 && picker.IsBusy; i++)
-            {
-                await Task.Delay(50);
-                HeadlessTestHelpers.Settle();
-            }
-            HeadlessTestHelpers.Settle();
-            item = FindClipping() ?? throw new InvalidOperationException("Clipping was not found in the effect picker.");
-        }
         var list = picker.GetVisualDescendants().OfType<ListBox>().Single(v => v.Name == "PART_ListBox");
         var scroll = list.GetVisualDescendants().OfType<ScrollViewer>().Single();
-        for (int attempt = 0; attempt < 20; attempt++)
+        // The list creates rows only around what it shows, so scroll down until Clipping's row exists and is in view.
+        ListBoxItem? item = null;
+        for (int attempt = 0; ; attempt++)
         {
-            double y = item.TranslatePoint(new Point(0, item.Bounds.Height / 2), scroll)!.Value.Y;
-            if (y >= item.Bounds.Height / 2 && y <= scroll.Viewport.Height - item.Bounds.Height / 2) break;
+            HeadlessTestHelpers.Render();
+            item = FindClipping();
+            double y = item?.TranslatePoint(new Point(0, item.Bounds.Height / 2), scroll)?.Y ?? double.PositiveInfinity;
+            if (item != null && y >= item.Bounds.Height / 2 && y <= scroll.Viewport.Height - item.Bounds.Height / 2) break;
+            if (attempt == 40) throw new InvalidOperationException("Clipping was not found in the effect picker.");
             await PointAtAsync(list, recorder);
             Window.MouseWheel(_pointer, new Avalonia.Vector(0, y < 0 ? 1 : -1));
             await recorder.TransitionAsync(0.2);
-            item = FindClipping() ?? throw new InvalidOperationException("Clipping disappeared while scrolling the picker.");
         }
         await recorder.HoldAsync(0.8);
         await ClickAsync(item, recorder);
@@ -307,6 +293,7 @@ internal sealed class DemoEditor
         Button accept = picker.GetVisualDescendants().OfType<Button>().Single(b => b.Name == "AcceptButton");
         await ClickAsync(accept, recorder);
         HeadlessTestHelpers.Settle();
+        Assert.That(filter.Value.Value, Is.InstanceOf<FilterEffectGroup>(), "+ must add Clipping inside an effect group.");
         FilterEffectListItemEditor child = view.GetVisualDescendants().OfType<FilterEffectListItemEditor>()
             .Single(v => v.DataContext is FilterEffectEditorViewModel { Value.Value: Clipping });
         var model = (FilterEffectEditorViewModel)child.DataContext!;
@@ -364,11 +351,17 @@ internal sealed class DemoEditor
         }
     }
 
-    public PropertyEditorMenu PropertyMenu(Guid owner, string name) => Window.GetVisualDescendants()
-        .OfType<PropertyEditorMenu>().Single(v => v.IsEffectivelyVisible
-            && v.DataContext is PropertyEditorViewModel vm
-            && vm.PropertyAdapter.GetEngineProperty() is { } property
-            && property.Name == name && property.GetOwnerObject()?.Id.Value == owner);
+    public PropertyEditorMenu PropertyMenu(Guid owner, string name) => PropertyRow(owner, name).Menu;
+
+    // Properties can share one row, such as X and Y; Component is the property's place in its row.
+    private (PropertyEditorMenu Menu, int Component) PropertyRow(Guid owner, string name) => Window.GetVisualDescendants()
+        .OfType<PropertyEditorMenu>()
+        .Where(v => v.IsEffectivelyVisible)
+        .Select(v => (Menu: v, Component: v.DataContext is PropertyEditorViewModel vm
+            ? vm.EditedProperties.ToList().FindIndex(p => p.GetEngineProperty() is { } property
+                && property.Name == name && property.GetOwnerObject()?.Id.Value == owner)
+            : -1))
+        .Single(row => row.Component >= 0);
 
     public async Task TypePropertyAsync(Guid owner, string name, string value, HeadlessVideoRecorder recorder)
     {
@@ -395,9 +388,28 @@ internal sealed class DemoEditor
 
     public async Task ScrubPropertyAsync(Guid owner, string name, HeadlessVideoRecorder recorder, params DemoAdjustment[] adjustments)
     {
-        var field = PropertyMenu(owner, name).GetVisualAncestors().OfType<NumberEditor<float>>().First();
-        var header = field.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Name == "PART_HeaderTextBlock");
-        await PointAtAsync(header, recorder);
+        (PropertyEditorMenu menu, int component) = PropertyRow(owner, name);
+        TextBlock header;
+        Func<float> value;
+        float smallChange;
+        if (((PropertyEditorViewModel)menu.DataContext!).EditedProperties.Count > 1)
+        {
+            // Each value of a joined row has its own draggable label inside the row's box.
+            var vector = menu.GetVisualAncestors().OfType<Vector2Editor<float>>().First();
+            header = vector.GetVisualDescendants().OfType<TextBlock>()
+                .Single(t => t.Name == (component == 0 ? "PART_HeaderFirstTextBlock" : "PART_HeaderSecondTextBlock"));
+            value = () => component == 0 ? vector.FirstValue : vector.SecondValue;
+            smallChange = vector.SmallChange;
+        }
+        else
+        {
+            var field = menu.GetVisualAncestors().OfType<NumberEditor<float>>().First();
+            header = field.GetVisualDescendants().OfType<TextBlock>().Single(t => t.Name == "PART_HeaderTextBlock");
+            value = () => field.Value;
+            smallChange = field.SmallChange;
+        }
+        await RevealInspectorControlAsync(header, recorder);
+        await PointAtAsync(header, recorder, PressablePoint(header));
         await recorder.HoldAsync(0.5);
         Window.MouseDown(_pointer, MouseButton.Left);
         try
@@ -405,14 +417,14 @@ internal sealed class DemoEditor
             for (int index = 0; index < adjustments.Length; index++)
             {
                 DemoAdjustment adjustment = adjustments[index];
-                float initialValue = field.Value;
+                float initialValue = value();
                 if (Math.Abs(initialValue - adjustment.Value) < 0.001f) continue;
                 // Keep the mouse held while checking the preview and reversing for a small correction.
-                bool coarse = Math.Abs(adjustment.Value - initialValue) / field.SmallChange > 180;
+                bool coarse = Math.Abs(adjustment.Value - initialValue) / smallChange > 180;
                 RawInputModifiers modifiers = coarse ? RawInputModifiers.Shift : RawInputModifiers.None;
                 double coefficient = coarse ? 10 : 1;
                 Point start = _pointer;
-                Point end = start + new Avalonia.Vector((adjustment.Value - initialValue) / field.SmallChange / coefficient, 0);
+                Point end = start + new Avalonia.Vector((adjustment.Value - initialValue) / smallChange / coefficient, 0);
                 if (!new Rect(Window.ClientSize).Contains(end)) throw new InvalidOperationException("Property scrub leaves the captured window.");
                 int frames = (int)Math.Round(adjustment.Seconds * recorder.FrameRate);
                 for (int frame = 1; frame <= frames; frame++)
@@ -425,7 +437,7 @@ internal sealed class DemoEditor
                     await SeekAsync(_editor.Player.CurrentFrame.Value.ToSeconds());
                     await recorder.FrameAsync();
                 }
-                Assert.That(field.Value, Is.EqualTo(adjustment.Value).Within(0.001), $"{name} must change through the header drag.");
+                Assert.That(value(), Is.EqualTo(adjustment.Value).Within(0.001), $"{name} must change through the header drag.");
                 if (index < adjustments.Length - 1) await recorder.HoldAsync(0.55);
             }
         }
@@ -435,6 +447,21 @@ internal sealed class DemoEditor
         }
         HeadlessTestHelpers.Settle();
         await recorder.HoldAsync(0.8);
+    }
+
+    // The text box beside a vector value's label covers the label's right half, so take the point nearest the
+    // label's center that the label itself receives.
+    private Point PressablePoint(Control label)
+    {
+        HeadlessTestHelpers.Render(2);
+        for (double x = Math.Floor(label.Bounds.Width / 2); x >= 1; x--)
+        {
+            var local = new Point(x, label.Bounds.Height / 2);
+            if (label.TranslatePoint(local, Window) is { } point && Window.InputHitTest(point) is Visual hit
+                && (ReferenceEquals(hit, label) || hit.GetVisualAncestors().Contains(label)))
+                return local;
+        }
+        throw new InvalidOperationException($"No part of the '{(label as TextBlock)?.Text}' label receives a press.");
     }
 
     public async Task ScrubAsync(double seconds, HeadlessVideoRecorder recorder)

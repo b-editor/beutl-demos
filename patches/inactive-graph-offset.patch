@@ -14,7 +14,7 @@ diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Na
 diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs
 --- a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs
 +++ b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.axaml.cs
-@@ -179,7 +179,8 @@
+@@ -181,7 +181,8 @@
 
      private void OnScrollChanged(object? sender, ScrollChangedEventArgs e)
      {

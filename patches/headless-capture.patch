@@ -13,15 +13,14 @@ diff --git a/tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj b/tests/Be
 diff --git a/tests/Beutl.HeadlessUITests/TestApp.axaml.cs b/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
 --- a/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
 +++ b/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
-@@ -16,6 +16,7 @@
+@@ -16,12 +16,14 @@
 
      public override void Initialize()
      {
 +        TestAppBuilder.ApplyDemoCulture();
          AvaloniaXamlLoader.Load(this);
          App.RegisterBundledEngineFonts();
-         // EditView's Timeline tool view (LayerHeader) resolves {StaticResource PaletteColors}, which the
-@@ -25,6 +26,7 @@
+     }
 
      public override void RegisterServices()
      {

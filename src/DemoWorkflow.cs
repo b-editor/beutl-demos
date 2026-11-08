@@ -33,11 +33,8 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         }
         JsonObject create = Object(Create);
         create["Text"] = "Your text";
-        create["FilterEffect"] = new JsonObject
-        {
-            ["$type"] = "[Beutl.Engine]Beutl.Graphics.Effects:FilterEffectGroup",
-            ["Children"] = new JsonArray()
-        };
+        // A new object has no filter; + puts the first effect into a new FilterEffectGroup.
+        create.Remove("FilterEffect");
         Object(Animate)["Transform"]!["Children"]![0]!.AsObject().Remove("Animations");
         // A separate layout offset lets the designer align the card without disturbing its motion.
         Object(Yours)["Transform"]!["Children"]!.AsArray().Add(new JsonObject
@@ -60,7 +57,8 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         await CheckpointAsync("00-type");
 
         Describe("Add Clipping inside the effect group");
-        await ui.AddClippingAsync(video);
+        Assert.That(Root(Create).FilterEffect.Value, Is.Null);
+        await ui.AddClippingAsync(Root(Create).Id.Value, video);
         await CheckpointAsync("00-effect-group");
         var clipping = ((FilterEffectGroup)Root(Create).FilterEffect.Value!).Children.OfType<Clipping>().Single();
         await ui.FramePropertyAsync(clipping.Id.Value, "Right", video);
@@ -140,8 +138,10 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         await ui.ShowTransformAsync(alignment.Id.Value, video);
         await ui.FramePropertyAsync(alignment.Id.Value, "Y", video);
         Describe("Drag Y — compare the spacing above and below the word");
-        await ui.ScrubPropertyAsync(alignment.Id.Value, "Y", video, new(-8, 1.7), new(0, 0.9));
+        // Stop short of the center, then nudge it up: a header drag that reaches 0 from below leaves -0 in the field.
+        await ui.ScrubPropertyAsync(alignment.Id.Value, "Y", video, new(8, 1.7), new(0, 0.9));
         Assert.That(alignment.Y.Value, Is.EqualTo(0).Within(0.001));
+        Assert.That(float.IsNegative(alignment.Y.Value), Is.False, "The aligned field must read 0, not -0.");
         Assert.That(alignment.Y.GetKeyFrameAnimation(), Is.Null);
         await ReviewAsync("03-card", 4.6, 6.5);
 

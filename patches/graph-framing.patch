@@ -10,30 +10,18 @@ diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Na
              graphPanel.UpdateLayout();
              double x = heightOnly ? scroll.Offset.X : keys.Min(x => x.Model.KeyTime.Value.TimeToPixel(model.Options.Value.Scale))
                  + model.Margin.Value.Left - padding;
-diff --git a/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs b/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
---- a/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
-+++ b/src/Beutl.Editor.Components/TimelineTab/Views/TimelineTabView.Scrolling.cs
-@@ -39,7 +39,7 @@
-         float delta = (float)e.Delta.Y;
-
-         scale = MathF.Pow(ZoomSpeed, delta) * scale;
--        scale = Math.Min(scale, 2);
-+        scale = Math.Min(scale, 100);
-
-         offset.X = ZoomOffsetX(pointerPos.X, offset.X, oldScale, scale);
-     }
 diff --git a/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs b/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs
 --- a/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs
 +++ b/src/Beutl.ProjectSystem/ProjectSystem/TimelineOptions.cs
-@@ -35,7 +35,7 @@
-     public float Scale
-     {
-         get => _scale;
--        init => _scale = Math.Min(value, 2);
-+        init => _scale = Math.Min(value, 100);
-     }
+@@ -24,7 +24,7 @@
+ {
+     // A scene of 1000 hours still fits on a screen at the lowest scale, where pixels still convert to a valid time.
+     public const float MinScale = 1e-6f;
+-    public const float MaxScale = 2;
++    public const float MaxScale = 100;
 
-     public Vector2 Offset
+     private readonly float _scale;
+     private readonly Vector2 _offset;
 diff --git a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs b/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs
 --- a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs
 +++ b/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs
@@ -100,10 +88,22 @@ diff --git a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs b/tests/
          Assert.That(scroll.Offset, Is.EqualTo(before));
      }
 
+diff --git a/tests/Beutl.HeadlessUITests/StandardShortcutsTests.cs b/tests/Beutl.HeadlessUITests/StandardShortcutsTests.cs
+--- a/tests/Beutl.HeadlessUITests/StandardShortcutsTests.cs
++++ b/tests/Beutl.HeadlessUITests/StandardShortcutsTests.cs
+@@ -854,7 +854,7 @@
+             await TimelineTabExtension.Instance.RunAsync(timeline, new ContextCommandExecution("timeline.resetZoom"));
+             Assert.That(timeline.Options.Value.Scale, Is.EqualTo(1));
+
+-            for (int i = 0; i < 20; i++)
++            for (int i = 0; i < 30; i++)
+                 await TimelineTabExtension.Instance.RunAsync(timeline, new ContextCommandExecution("timeline.zoomIn"));
+             Assert.That(timeline.Options.Value.Scale, Is.EqualTo(TimelineOptions.MaxScale));
+         }
 diff --git a/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs b/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs
 --- a/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs
 +++ b/tests/Beutl.UnitTests/ProjectSystem/TimelineOptionsTests.cs
-@@ -36,21 +36,21 @@
+@@ -43,21 +43,21 @@
      }
 
      [Test]
