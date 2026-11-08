@@ -218,8 +218,14 @@ internal sealed class DemoEditor
         // ElementView stretches across the entire row; its named border is the actual clip hit target.
         Border target = row.FindControl<Border>("border")
             ?? throw new InvalidOperationException($"Timeline element '{name}' has no clip border.");
+        ScrollViewer timeline = Window.GetVisualDescendants().OfType<TimelineTabView>().Single(v => v.IsEffectivelyVisible)
+            .FindControl<ScrollViewer>("ContentScroll")!;
+        Avalonia.Vector offset = timeline.Offset;
         target.BringIntoView();
         HeadlessTestHelpers.Render(2);
+        // A programmatic scroll would jump; every scroll in the recording glides.
+        if (timeline.Offset != offset)
+            throw new InvalidOperationException($"Selecting timeline element '{name}' jumped the timeline; scroll it into view smoothly.");
         Point destination = target.TranslatePoint(new Point(target.Bounds.Width / 2, target.Bounds.Height / 2), Window)
             ?? throw new InvalidOperationException($"Timeline element '{name}' is not attached.");
         if (!new Rect(Window.ClientSize).Contains(destination))
@@ -253,21 +259,44 @@ internal sealed class DemoEditor
         ScrollViewer scroll = inspector.FindControl<ScrollViewer>("scrollViewer")!;
         Point origin = scroll.TranslatePoint(default, Window)!.Value;
         bool moved = false;
-        for (int attempt = 0; attempt < 20; attempt++)
+        for (int attempt = 0; attempt < 4; attempt++)
         {
             HeadlessTestHelpers.Render(2);
             double y = target.TranslatePoint(new Point(0, target.Bounds.Height / 2), Window)!.Value.Y;
-            double delta = y - Math.Clamp(y, origin.Y + 24, origin.Y + scroll.Bounds.Height - 24);
-            if (Math.Abs(delta) < 1) return;
+            double top = origin.Y + 24, bottom = origin.Y + scroll.Bounds.Height - 24;
+            if (y >= top && y <= bottom) return;
             if (!moved)
             {
                 await MoveToAsync(origin + new Avalonia.Vector(scroll.Bounds.Width * 0.72, scroll.Bounds.Height * 0.55), recorder);
                 moved = true;
             }
-            Window.MouseWheel(_pointer, new Avalonia.Vector(0, -Math.Sign(delta) * 2));
-            await recorder.TransitionAsync(0.2);
+            // One gesture brings the field a little inside the edge it comes from.
+            double distance = y < top ? y - (top + 40) : y - (bottom - 40);
+            await WheelSmoothlyAsync(new Avalonia.Vector(0, -distance / WheelPixels), ScrollSeconds(distance), recorder);
         }
         throw new InvalidOperationException("The inspector field could not be reached by scrolling.");
+    }
+
+    // A wheel unit scrolls a scroll viewer 50 px.
+    private const double WheelPixels = 50;
+
+    private static double ScrollSeconds(double pixels) => Math.Clamp(0.3 + Math.Abs(pixels) / 1500, 0.35, 0.7);
+
+    // Scrolls as a trackpad does: the wheel's travel arrives in small steps over several frames, easing in and out,
+    // instead of whole notches that jump. A zooming wheel composes the same way.
+    private async Task WheelSmoothlyAsync(Avalonia.Vector travel, double seconds, HeadlessVideoRecorder recorder,
+        RawInputModifiers modifiers = RawInputModifiers.None)
+    {
+        int frames = Math.Max(2, (int)Math.Round(seconds * recorder.FrameRate));
+        double sent = 0;
+        for (int frame = 1; frame <= frames; frame++)
+        {
+            double t = (double)frame / frames;
+            t = t * t * (3 - 2 * t);
+            Window.MouseWheel(_pointer, travel * (t - sent), modifiers);
+            sent = t;
+            await recorder.FrameAsync();
+        }
     }
 
     private async Task MoveToAsync(Point destination, HeadlessVideoRecorder recorder)
@@ -317,7 +346,19 @@ internal sealed class DemoEditor
             i.DataContext is PinnableLibraryItem { UserData: SingleTypeLibraryItem library } && library.ImplementationType == typeof(Clipping));
         var list = picker.GetVisualDescendants().OfType<ListBox>().Single(v => v.Name == "PART_ListBox");
         var scroll = list.GetVisualDescendants().OfType<ScrollViewer>().Single();
-        // The list creates rows only around what it shows, so scroll down until Clipping's row exists and is in view.
+        await PointAtAsync(list, recorder);
+        HeadlessTestHelpers.Render();
+        // The list creates rows only around what it shows, but its rows share one height, so Clipping's row is as far
+        // down as its index. One gesture brings it into view with a row below it.
+        int index = list.Items.Cast<object?>().ToList().FindIndex(o =>
+            o is PinnableLibraryItem { UserData: SingleTypeLibraryItem library } && library.ImplementationType == typeof(Clipping));
+        if (index < 0) throw new InvalidOperationException("Clipping is not in the effect picker.");
+        Control[] rows = [.. list.GetRealizedContainers().OrderBy(list.IndexFromContainer)];
+        double firstTop = rows[0].TranslatePoint(default, scroll)!.Value.Y;
+        double pitch = rows[1].TranslatePoint(default, scroll)!.Value.Y - firstTop;
+        double distance = Math.Min(firstTop + (index - list.IndexFromContainer(rows[0]) + 2) * pitch - scroll.Viewport.Height,
+            scroll.Extent.Height - scroll.Viewport.Height - scroll.Offset.Y);
+        if (distance > 1) await WheelSmoothlyAsync(new Avalonia.Vector(0, -distance / WheelPixels), ScrollSeconds(distance), recorder);
         ListBoxItem? item = null;
         for (int attempt = 0; ; attempt++)
         {
@@ -325,10 +366,10 @@ internal sealed class DemoEditor
             item = FindClipping();
             double y = item?.TranslatePoint(new Point(0, item.Bounds.Height / 2), scroll)?.Y ?? double.PositiveInfinity;
             if (item != null && y >= item.Bounds.Height / 2 && y <= scroll.Viewport.Height - item.Bounds.Height / 2) break;
-            if (attempt == 40) throw new InvalidOperationException("Clipping was not found in the effect picker.");
-            await PointAtAsync(list, recorder);
-            Window.MouseWheel(_pointer, new Avalonia.Vector(0, y < 0 ? 1 : -1));
-            await recorder.TransitionAsync(0.2);
+            if (attempt == 3) throw new InvalidOperationException("Clipping was not found in the effect picker.");
+            // A missed estimate finishes with another smooth gesture from where the row is now.
+            double miss = item == null ? 2 * pitch : y - (scroll.Viewport.Height - 1.5 * pitch);
+            await WheelSmoothlyAsync(new Avalonia.Vector(0, -miss / WheelPixels), ScrollSeconds(miss), recorder);
         }
         await recorder.HoldAsync(0.8);
         await ClickAsync(item, recorder);
@@ -378,8 +419,7 @@ internal sealed class DemoEditor
             if (_pointer.Y > Window.ClientSize.Height - 40)
             {
                 // Keep the whole recording cursor visible when the selected row is at the bottom.
-                Window.MouseWheel(_pointer, new Avalonia.Vector(0, -1));
-                await recorder.TransitionAsync(0.2);
+                await WheelSmoothlyAsync(new Avalonia.Vector(0, -1), 0.2, recorder);
             }
             bool clicked = false;
             void OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs args) => clicked = true;
@@ -730,20 +770,6 @@ internal sealed class DemoEditor
     public async Task ShowTimelineAsync(HeadlessVideoRecorder recorder)
     {
         _graphCameraTarget = null;
-        GraphEditorView? graph = Window.GetVisualDescendants().OfType<GraphEditorView>().SingleOrDefault(v => v.IsEffectivelyVisible);
-        if (graph?.DataContext is GraphEditorViewModel model && model.Options.Value.Scale > 0.86f)
-        {
-            Border ruler = graph.FindControl<Border>("RulerBar")!;
-            await PointAtAsync(ruler, recorder, new Point(1, 22));
-            double delta = Math.Log(0.85 / model.Options.Value.Scale, 1.2) / 24;
-            for (int i = 0; i < 24; i++)
-            {
-                Window.MouseWheel(_pointer, new Avalonia.Vector(0, delta), RawInputModifiers.Alt);
-                await recorder.FrameAsync();
-            }
-            Window.MouseWheel(_pointer, new Avalonia.Vector(0, model.ScrollOffset.Value.X / 50));
-            await recorder.TransitionAsync(0.3);
-        }
         if (!Timeline.IsSelected.Value)
         {
             ToolTabStripItem tab = Window.GetVisualDescendants().OfType<ToolTabStripItem>()
@@ -752,6 +778,31 @@ internal sealed class DemoEditor
             await ClickAsync(title, recorder);
         }
         HeadlessTestHelpers.Render(2);
+        // The graph editor shares the timeline's zoom, so after fitting a curve the timeline opens zoomed in.
+        // Zoom it back out where the viewer sees it.
+        if (Timeline.Options.Value.Scale > 0.86f) await ZoomTimelineOutAsync(recorder);
+    }
+
+    // Command-scrolls on the timeline's ruler back to the overview zoom, ending with the scene's start on the left edge.
+    private async Task ZoomTimelineOutAsync(HeadlessVideoRecorder recorder)
+    {
+        TimelineTabView view = Window.GetVisualDescendants().OfType<TimelineTabView>().Single(v => v.IsEffectivelyVisible);
+        Border ruler = view.FindControl<Border>("RulerBar")!;
+        ScrollViewer scroll = view.FindControl<ScrollViewer>("ContentScroll")!;
+        double ratio = 0.85 / Timeline.Options.Value.Scale;
+        // Zooming keeps the time under the pointer in place. From this point the scene's start reaches the left edge
+        // just as the zoom ends; nearer the edge the start stays pinned there. Stay clear of the start marker's grip.
+        double x = Math.Clamp(Math.Max(scroll.Offset.X * ratio / (1 - ratio), 48), 1, ruler.Bounds.Width - 4);
+        await PointAtAsync(ruler, recorder, new Point(x, 22));
+        RawInputModifiers command = KeyGestureHelper.GetCommandModifier() == KeyModifiers.Meta
+            ? RawInputModifiers.Meta : RawInputModifiers.Control;
+        await WheelSmoothlyAsync(new Avalonia.Vector(0, Math.Log(ratio, 1.2)), 0.8, recorder, command);
+        HeadlessTestHelpers.Render(2);
+        // A plain wheel scrolls the timeline sideways.
+        if (scroll.Offset.X > 0.5)
+            await WheelSmoothlyAsync(new Avalonia.Vector(0, scroll.Offset.X / WheelPixels), ScrollSeconds(scroll.Offset.X), recorder);
+        Assert.That(Timeline.Options.Value.Scale, Is.EqualTo(0.85f).Within(0.0005f));
+        Assert.That(scroll.Offset.X, Is.LessThan(0.5), "The zoomed-out timeline must start at the scene's start.");
     }
 
     public void ClearSelection()
