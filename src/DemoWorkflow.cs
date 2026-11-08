@@ -143,7 +143,8 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         Assert.That(alignment.Y.Value, Is.EqualTo(0).Within(0.001));
         Assert.That(float.IsNegative(alignment.Y.Value), Is.False, "The aligned field must read 0, not -0.");
         Assert.That(alignment.Y.GetKeyFrameAnimation(), Is.Null);
-        await ReviewAsync("03-card", 4.6, 6.5);
+        // Leave the field before watching: the pointer waits on empty timeline past where the last playback stops.
+        await ReviewAsync("03-card", 4.6, 6.5, parkAt: 8.7);
 
         await ui.ShowTimelineAsync(video);
         ui.ClearSelection();
@@ -192,10 +193,10 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
     private Drawable Root(string name) => (Drawable)ui.Element(name).Objects[0];
     private Task CheckpointAsync(string name) => video.FrameAsync(System.IO.Path.Combine(output, name + ".png"));
 
-    private async Task ReviewAsync(string checkpoint, double start, double end)
+    private async Task ReviewAsync(string checkpoint, double start, double end, double? parkAt = null)
     {
         Describe("Play this section and check the result");
-        await ui.PlayAsync(video, start, end);
+        await ui.PlayAsync(video, start, end, parkAt);
         await CheckpointAsync(checkpoint);
         await video.HoldAsync(0.4);
     }

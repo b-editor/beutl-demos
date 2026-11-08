@@ -144,11 +144,13 @@ internal sealed class DemoEditor
         HeadlessTestHelpers.Render();
     }
 
-    public async Task PlayAsync(HeadlessVideoRecorder recorder, double start, double end)
+    public async Task PlayAsync(HeadlessVideoRecorder recorder, double start, double end, double? parkAt = null)
     {
         _focusCamera = false;
         _graphCameraTarget = null;
-        await recorder.HoldAsync(0.6);
+        // The pause before playback can take the pointer off a field, so no field cursor sits over the playback.
+        if (parkAt is { } time) await ParkPointerAsync(time, 0.6, recorder);
+        else await recorder.HoldAsync(0.6);
         int count = (int)Math.Round((end - start) * recorder.FrameRate);
         for (int frame = 0; frame < count; frame++)
         {
@@ -156,6 +158,49 @@ internal sealed class DemoEditor
             await SeekAsync(start + (double)frame / recorder.FrameRate);
             await recorder.FrameAsync();
         }
+    }
+
+    // Moves the pointer, in exactly the given pause, to empty timeline at the given time: the middle of the longest run
+    // of rows no clip covers then, or the row below the last clip if there is none. Mid-timeline keeps the arrow clear
+    // of clips and of the frame's bottom edge while the camera pulls out of a close-up.
+    // Pass a time no playback reaches, so the playhead never passes under the pointer.
+    private async Task ParkPointerAsync(double seconds, double pause, HeadlessVideoRecorder recorder)
+    {
+        TimelineTabView view = Window.GetVisualDescendants().OfType<TimelineTabView>().Single(v => v.IsEffectivelyVisible);
+        Panel panel = view.FindControl<Panel>("TimelinePanel")!;
+        ScrollViewer scroll = view.FindControl<ScrollViewer>("ContentScroll")!;
+        MediaTime time = MediaTime.FromSeconds(seconds);
+        HashSet<int> covered = _editor.Scene.Children.Where(e => e.Range.Contains(time)).Select(e => e.ZIndex.Value).ToHashSet();
+        int last = _editor.Scene.Children.Max(e => e.ZIndex.Value);
+        int first = last + 1, length = 0;
+        for (int index = 0, run = 0; index <= last; index++)
+        {
+            run = covered.Contains(index) ? 0 : run + 1;
+            if (run > length) (first, length) = (index - run + 1, run);
+        }
+        int row = first + Math.Max(length - 1, 0) / 2;
+        var local = new Point(time.TimeToPixel(Timeline.Options.Value.Scale),
+            (Timeline.CalculateLayerTop(row) + Timeline.CalculateLayerTop(row + 1)) / 2);
+        Point destination = panel.TranslatePoint(local, Window)
+            ?? throw new InvalidOperationException("The timeline is not attached.");
+        if (!new Rect(scroll.TranslatePoint(default, Window)!.Value, scroll.Viewport).Contains(destination))
+            throw new InvalidOperationException("The empty timeline row is out of view.");
+        HeadlessTestHelpers.Render(2);
+        Visual? hit = Window.InputHitTest(destination) as Visual;
+        Assert.That(hit != null && (ReferenceEquals(hit, panel) || hit.GetVisualAncestors().Contains(panel))
+            && !hit.GetSelfAndVisualAncestors().OfType<ElementView>().Any(), Is.True,
+            $"The pointer must rest on empty timeline, not on {hit?.GetType().Name}.");
+        Point from = _pointer;
+        int frames = (int)Math.Round(pause * recorder.FrameRate);
+        for (int frame = 1; frame <= frames; frame++)
+        {
+            double t = (double)frame / frames;
+            t = t * t * (3 - 2 * t);
+            MovePointer(from + (destination - from) * t);
+            Window.MouseMove(_pointer);
+            await recorder.FrameAsync();
+        }
+        Assert.That(_cursor.At(_pointer), Is.EqualTo("Arrow"));
     }
 
     public async Task SelectAsync(string name, HeadlessVideoRecorder recorder)
