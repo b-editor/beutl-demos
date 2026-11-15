@@ -33,8 +33,9 @@ internal sealed class DemoWorkflow(DemoEditor ui, HeadlessVideoRecorder video, s
         }
         JsonObject create = Object(Create);
         create["Text"] = "Your text";
-        // A new object has no filter; + puts the first effect into a new FilterEffectGroup.
-        create.Remove("FilterEffect");
+        // Start without a filter so + puts the first effect into a new FilterEffectGroup. Since Beutl 2.0.0-preview.12,
+        // leaving the key out keeps the constructor's empty group, so clear it explicitly.
+        create["FilterEffect"] = null;
         Object(Animate)["Transform"]!["Children"]!.AsArray()
             .Single(c => c!["$type"]!.GetValue<string>().EndsWith(":ScaleTransform", StringComparison.Ordinal))!
             .AsObject().Remove("Animations");
