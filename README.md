@@ -8,7 +8,7 @@ capture or change an installed desktop Beutl session.
 ## Requirements
 
 - macOS for the included macOS window presentation; a working Vulkan/MoltenVK device.
-- .NET 10 SDK (the pinned Beutl checkout supplies `global.json`).
+- The .NET SDK named by the pinned Beutl checkout's `global.json` (.NET 11 since 2.0.0-preview.12).
 - Python 3.10+, Git, FFmpeg and FFprobe on `PATH`.
 - Xcode Command Line Tools, including Swift, to read native AppKit cursor artwork.
 - FFmpeg encoders `libx264` and `libvpx-vp9` for MP4 and WebM respectively.

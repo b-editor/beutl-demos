@@ -27,8 +27,33 @@ internal static class DemoReferenceVerifier
         await using var video = new DemoVideoEncoder(Path.Combine(output, "hero-final.mp4"), 1920, 1080, 30, "bgra");
         using var expectedHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
         using var actualHash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
+        // Render the reference in a pass of its own, then the result. In Beutl 2.0.0-preview.13, two renderers drawing the
+        // same frame in turn can differ in one or two antialiased pixels, even for two copies of one composition.
+        var frames = new byte[270][];
         SceneRenderer expected = await RenderThread.Dispatcher.InvokeAsync(() => ExportRendererFactory.Create(reference));
+        try
+        {
+            for (int frame = 0; frame < 270; frame++)
+            {
+                int current = frame;
+                frames[current] = await RenderThread.Dispatcher.InvokeAsync(() =>
+                {
+                    expected.Render(expected.Compositor.EvaluateGraphics(MediaTime.FromFrames(current, new Rational(30))));
+                    using Bitmap raw = expected.Snapshot();
+                    using Bitmap a = raw.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);
+                    expectedHash.AppendData(a.GetPixelSpan());
+                    if (current is 119 or 133 or 149)
+                        a.Save(Path.Combine(output, $"reference-{current:D3}.png"), EncodedImageFormat.Png);
+                    return SHA256.HashData(a.GetPixelSpan());
+                });
+            }
+        }
+        finally
+        {
+            await RenderThread.Dispatcher.InvokeAsync(() => expected.Dispose());
+        }
         SceneRenderer actual = await RenderThread.Dispatcher.InvokeAsync(() => ExportRendererFactory.Create(edited));
+        int? mismatch = null;
         try
         {
             for (int frame = 0; frame < 270; frame++)
@@ -36,30 +61,37 @@ internal static class DemoReferenceVerifier
                 int current = frame;
                 byte[] pixels = await RenderThread.Dispatcher.InvokeAsync(() =>
                 {
-                    MediaTime time = MediaTime.FromFrames(current, new Rational(30));
-                    expected.Render(expected.Compositor.EvaluateGraphics(time));
-                    actual.Render(actual.Compositor.EvaluateGraphics(time));
-                    using Bitmap rawA = expected.Snapshot();
-                    using Bitmap rawB = actual.Snapshot();
-                    using Bitmap a = rawA.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);
-                    using Bitmap b = rawB.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);
-                    expectedHash.AppendData(a.GetPixelSpan());
+                    actual.Render(actual.Compositor.EvaluateGraphics(MediaTime.FromFrames(current, new Rational(30))));
+                    using Bitmap raw = actual.Snapshot();
+                    using Bitmap b = raw.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);
                     actualHash.AppendData(b.GetPixelSpan());
-                    bool equal = a.GetPixelSpan().SequenceEqual(b.GetPixelSpan());
+                    bool equal = SHA256.HashData(b.GetPixelSpan()).AsSpan().SequenceEqual(frames[current]);
                     if (!equal || current is 119 or 133 or 149)
-                    {
-                        a.Save(Path.Combine(output, $"reference-{current:D3}.png"), EncodedImageFormat.Png);
                         b.Save(Path.Combine(output, $"result-{current:D3}.png"), EncodedImageFormat.Png);
-                    }
-                    Assert.That(equal, Is.True, $"Frame {current} at {time} must exactly match the original MCP composition.");
+                    if (!equal) mismatch ??= current;
                     return b.GetPixelSpan().ToArray();
                 });
+                if (mismatch != null) break;
                 await video.WriteAsync(pixels);
             }
         }
         finally
         {
-            await RenderThread.Dispatcher.InvokeAsync(() => { expected.Dispose(); actual.Dispose(); });
+            await RenderThread.Dispatcher.InvokeAsync(() => actual.Dispose());
+        }
+        if (mismatch is int failed)
+        {
+            // Draw the reference's frame again for comparison, now that the result's renderer is gone. It is saved under its
+            // own name, so a sample the first pass saved for this frame stays the image that was compared.
+            await RenderThread.Dispatcher.InvokeAsync(() =>
+            {
+                using SceneRenderer again = ExportRendererFactory.Create(reference);
+                again.Render(again.Compositor.EvaluateGraphics(MediaTime.FromFrames(failed, new Rational(30))));
+                using Bitmap raw = again.Snapshot();
+                using Bitmap a = raw.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);
+                a.Save(Path.Combine(output, $"reference-{failed:D3}-rerendered.png"), EncodedImageFormat.Png);
+            });
+            Assert.Fail($"Frame {failed} at {MediaTime.FromFrames(failed, new Rational(30))} must exactly match the original MCP composition.");
         }
         await video.CompleteAsync();
         string expectedDigest = Convert.ToHexString(expectedHash.GetHashAndReset());

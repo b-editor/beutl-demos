@@ -94,7 +94,10 @@ def run_scenario(args):
                  "FullyQualifiedName~GraphEditorInteractionTests.Ruler_zoom_at_the_time_scale_limit_does_not_pan|"
                  "FullyQualifiedName~Demos.DemoFrameComposerTests") if command == "check" else (
                      "FullyQualifiedName=" + SCENARIO + methods[command])
-    invocation = ["dotnet", "test", PROJECT, "-c", "Release", "-f", "net10.0",
+    # The pinned revision decides the .NET version (net10.0 before 2.0.0-preview.12, net11.0 after).
+    framework = re.search(r"<TargetFrameworks?>([^;<]+)",
+                          (checkout / PROJECT).read_text()).group(1).strip()
+    invocation = ["dotnet", "test", PROJECT, "-c", "Release", "-f", framework,
                   "--filter", selection, "--logger", "console;verbosity=normal"]
     if args.no_build:
         invocation += ["--no-build", "--no-restore"]

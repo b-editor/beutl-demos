@@ -8,7 +8,9 @@ using Avalonia.Automation;
 using Avalonia.Input.Raw;
 using Beutl.Animation;
 using Beutl.Animation.Easings;
+using Beutl.Controls;
 using Beutl.Editor.Components;
+using Beutl.Editor.Components.LibraryThumbnails;
 using Beutl.Editor.Components.LibraryTab.Views;
 using Beutl.Editor.Components.LibraryTab.Views.LibraryViews;
 using Avalonia.VisualTree;
@@ -342,21 +344,36 @@ internal sealed class DemoEditor
         Button add = toggle.GetVisualDescendants().OfType<Button>().Single(b => b is not ToggleButton && b.IsEffectivelyVisible);
         await ClickAsync(add, recorder);
         LibraryItemPickerFlyoutPresenter picker = Window.GetVisualDescendants().OfType<LibraryItemPickerFlyoutPresenter>().Single();
-        ListBoxItem? FindClipping() => picker.GetVisualDescendants().OfType<ListBoxItem>().SingleOrDefault(i =>
+        // Effects open as thumbnail tiles by default since Beutl 2.0.0-preview.12; use whichever view the picker shows.
+        var list = picker.GetVisualDescendants().OfType<ListBox>()
+            .Single(v => v.Name is "PART_ListBox" or "PART_TileListBox" && v.IsEffectivelyVisible);
+        var scroll = list.GetVisualDescendants().OfType<ScrollViewer>().First();
+        await WaitForThumbnailsAsync(list);
+        ListBoxItem? FindClipping() => list.GetVisualDescendants().OfType<ListBoxItem>().SingleOrDefault(i =>
             i.DataContext is PinnableLibraryItem { UserData: SingleTypeLibraryItem library } && library.ImplementationType == typeof(Clipping));
-        var list = picker.GetVisualDescendants().OfType<ListBox>().Single(v => v.Name == "PART_ListBox");
-        var scroll = list.GetVisualDescendants().OfType<ScrollViewer>().Single();
         await PointAtAsync(list, recorder);
         HeadlessTestHelpers.Render();
-        // The list creates rows only around what it shows, but its rows share one height, so Clipping's row is as far
-        // down as its index. One gesture brings it into view with a row below it.
         int index = list.Items.Cast<object?>().ToList().FindIndex(o =>
             o is PinnableLibraryItem { UserData: SingleTypeLibraryItem library } && library.ImplementationType == typeof(Clipping));
         if (index < 0) throw new InvalidOperationException("Clipping is not in the effect picker.");
-        Control[] rows = [.. list.GetRealizedContainers().OrderBy(list.IndexFromContainer)];
-        double firstTop = rows[0].TranslatePoint(default, scroll)!.Value.Y;
-        double pitch = rows[1].TranslatePoint(default, scroll)!.Value.Y - firstTop;
-        double distance = Math.Min(firstTop + (index - list.IndexFromContainer(rows[0]) + 2) * pitch - scroll.Viewport.Height,
+        double top, pitch;
+        if (list.ContainerFromIndex(index) is { } realized)
+        {
+            // The tile grid creates every tile, so Clipping's own position is known.
+            top = realized.TranslatePoint(default, scroll)!.Value.Y;
+            pitch = realized.Bounds.Height + realized.Margin.Top + realized.Margin.Bottom;
+        }
+        else
+        {
+            // The list creates rows only around what it shows, but its rows share one height, so Clipping's row is as
+            // far down as its index.
+            Control[] rows = [.. list.GetRealizedContainers().OrderBy(list.IndexFromContainer)];
+            double firstTop = rows[0].TranslatePoint(default, scroll)!.Value.Y;
+            pitch = rows[1].TranslatePoint(default, scroll)!.Value.Y - firstTop;
+            top = firstTop + (index - list.IndexFromContainer(rows[0])) * pitch;
+        }
+        // One gesture brings it into view with a row below it.
+        double distance = Math.Min(top + 2 * pitch - scroll.Viewport.Height,
             scroll.Extent.Height - scroll.Viewport.Height - scroll.Offset.Y);
         if (distance > 1) await WheelSmoothlyAsync(new Avalonia.Vector(0, -distance / WheelPixels), ScrollSeconds(distance), recorder);
         ListBoxItem? item = null;
@@ -371,6 +388,7 @@ internal sealed class DemoEditor
             double miss = item == null ? 2 * pitch : y - (scroll.Viewport.Height - 1.5 * pitch);
             await WheelSmoothlyAsync(new Avalonia.Vector(0, -miss / WheelPixels), ScrollSeconds(miss), recorder);
         }
+        await WaitForThumbnailsAsync(list);
         await recorder.HoldAsync(0.8);
         await ClickAsync(item, recorder);
         Assert.That(picker.SelectedItem?.UserData,
@@ -388,6 +406,17 @@ internal sealed class DemoEditor
         await PointAtAsync(child.FindControl<ToggleButton>("reorderHandle")!, recorder);
         await recorder.HoldAsync(0.9);
     }
+
+    // Tiles draw their thumbnails in the background while the recording runs faster than real time. Wait, without
+    // recording, until those on screen show what a person would see a moment after the picker opens.
+    private static Task WaitForThumbnailsAsync(Control root) => HeadlessTestHelpers.WaitUntilAsync(() =>
+    {
+        HeadlessTestHelpers.Render();
+        return root.GetVisualDescendants().OfType<AnimatedThumbnail>()
+            .Where(t => t.IsOnScreen && t.Source != null)
+            .All(t => t.Source is LibraryThumbnailSource { Failed: true }
+                || t.Source!.Still != null && (!t.IsPlaying || t.Source.Frames != null));
+    }, TimeSpan.FromSeconds(120), "The effect picker's thumbnails did not draw.");
 
     public async Task AddKeyframeAsync(Guid owner, string name, HeadlessVideoRecorder recorder)
     {
