@@ -81,14 +81,15 @@ internal static class DemoReferenceVerifier
         }
         if (mismatch is int failed)
         {
-            // Draw the reference's frame again for comparison, now that the result's renderer is gone.
+            // Draw the reference's frame again for comparison, now that the result's renderer is gone. It is saved under its
+            // own name, so a sample the first pass saved for this frame stays the image that was compared.
             await RenderThread.Dispatcher.InvokeAsync(() =>
             {
                 using SceneRenderer again = ExportRendererFactory.Create(reference);
                 again.Render(again.Compositor.EvaluateGraphics(MediaTime.FromFrames(failed, new Rational(30))));
                 using Bitmap raw = again.Snapshot();
                 using Bitmap a = raw.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);
-                a.Save(Path.Combine(output, $"reference-{failed:D3}.png"), EncodedImageFormat.Png);
+                a.Save(Path.Combine(output, $"reference-{failed:D3}-rerendered.png"), EncodedImageFormat.Png);
             });
             Assert.Fail($"Frame {failed} at {MediaTime.FromFrames(failed, new Rational(30))} must exactly match the original MCP composition.");
         }
