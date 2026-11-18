@@ -13,21 +13,22 @@ diff --git a/tests/Beutl.HeadlessUITests/Beutl.HeadlessUITests.csproj b/tests/Be
 diff --git a/tests/Beutl.HeadlessUITests/TestApp.axaml.cs b/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
 --- a/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
 +++ b/tests/Beutl.HeadlessUITests/TestApp.axaml.cs
-@@ -16,12 +16,14 @@
+@@ -44,6 +44,7 @@
 
      public override void Initialize()
      {
 +        TestAppBuilder.ApplyDemoCulture();
-         AvaloniaXamlLoader.Load(this);
-         App.RegisterBundledEngineFonts();
-     }
+         Beutl.Testing.Headless.ControlHost.ConfigureWindow = window =>
+         {
+             if (Beutl.Controls.ControlNotifications.GetNotifications(window) is null)
+@@ -59,6 +60,7 @@
 
      public override void RegisterServices()
      {
 +        TestAppBuilder.ApplyDemoCulture();
          base.RegisterServices();
 
-         App.RegisterProcessServices(() => GetMainViewModel().ContextCommandManager);
+         App.RegisterProcessServices(Library, () => GetMainViewModel().ContextCommandManager);
 diff --git a/tests/Beutl.HeadlessUITests/TestAppBuilder.cs b/tests/Beutl.HeadlessUITests/TestAppBuilder.cs
 --- a/tests/Beutl.HeadlessUITests/TestAppBuilder.cs
 +++ b/tests/Beutl.HeadlessUITests/TestAppBuilder.cs

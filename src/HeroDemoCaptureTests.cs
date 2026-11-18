@@ -20,7 +20,7 @@ public sealed class HeroDemoCaptureTests
     {
         using Stream font = typeof(HeroDemoCaptureTests).Assembly.GetManifestResourceStream("DemoHeroFont.ttf")
             ?? throw new InvalidOperationException("The bundled Inter typeface is missing.");
-        Beutl.Media.FontManager.Instance.AddFont(font);
+        TestShell.FontManager.AddFont(font);
     }
 
     [AvaloniaTest]
@@ -84,9 +84,9 @@ public sealed class HeroDemoCaptureTests
         foreach (var element in editor.Scene.Children)
             Assert.That(element.AccentColor.Value, Is.EqualTo(Beutl.Editor.Services.ElementAccentColorGenerator.GenerateColor(
                 element.Objects[0].GetType().FullName!)));
-        bool pointerLock = Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty.Value;
+        bool pointerLock = TestShell.Configuration.EditorConfig.EnablePointerLockInProperty.Value;
         // Native pointer lock reads the physical mouse, which must never be touched by a headless capture.
-        Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty.Value = false;
+        TestShell.Configuration.EditorConfig.EnablePointerLockInProperty.Value = false;
         int contentHeight = camera.WindowHeight - titleBarHeight;
         Assert.That(contentHeight, Is.GreaterThanOrEqualTo(480), "The title bar must leave room for the editor.");
         var ui = new DemoEditor(editor, camera.WindowWidth, contentHeight, camera.RenderScale);
@@ -132,7 +132,7 @@ public sealed class HeroDemoCaptureTests
         }
         finally
         {
-            Beutl.Configuration.GlobalConfiguration.Instance.EditorConfig.EnablePointerLockInProperty.Value = pointerLock;
+            TestShell.Configuration.EditorConfig.EnablePointerLockInProperty.Value = pointerLock;
             ui.Window.Close();
             await TestReset.ResetShellAsync();
         }

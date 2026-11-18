@@ -34,6 +34,7 @@ internal static class DemoMacTitleBar
             Width = width, Height = title.Height + 1, Content = host,
             Background = (IBrush)background!, RequestedThemeVariant = ThemeVariant.Dark
         };
+        Beutl.Testing.Headless.ControlHost.ConfigureWindow?.Invoke(window);
         try
         {
             window.Show();

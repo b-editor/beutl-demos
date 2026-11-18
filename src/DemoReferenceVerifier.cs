@@ -14,6 +14,7 @@ internal static class DemoReferenceVerifier
 {
     public static async Task VerifyAsync(Scene edited, IEnumerable<JsonObject> templates, string output)
     {
+        FontManager fonts = TestShell.FontManager;
         var reference = new Scene(1920, 1080, "Original MCP composition") { Duration = { Value = MediaTime.FromSeconds(9) } };
         foreach (JsonObject template in templates)
             reference.Children.Add((Element)CoreSerializer.DeserializeFromJsonObject(template, typeof(Element)));
@@ -30,7 +31,7 @@ internal static class DemoReferenceVerifier
         // Render the reference in a pass of its own, then the result. In Beutl 2.0.0-preview.13, two renderers drawing the
         // same frame in turn can differ in one or two antialiased pixels, even for two copies of one composition.
         var frames = new byte[270][];
-        SceneRenderer expected = await RenderThread.Dispatcher.InvokeAsync(() => ExportRendererFactory.Create(reference));
+        SceneRenderer expected = await RenderThread.Dispatcher.InvokeAsync(() => ExportRendererFactory.Create(reference, fonts));
         try
         {
             for (int frame = 0; frame < 270; frame++)
@@ -52,7 +53,7 @@ internal static class DemoReferenceVerifier
         {
             await RenderThread.Dispatcher.InvokeAsync(() => expected.Dispose());
         }
-        SceneRenderer actual = await RenderThread.Dispatcher.InvokeAsync(() => ExportRendererFactory.Create(edited));
+        SceneRenderer actual = await RenderThread.Dispatcher.InvokeAsync(() => ExportRendererFactory.Create(edited, fonts));
         int? mismatch = null;
         try
         {
@@ -85,7 +86,7 @@ internal static class DemoReferenceVerifier
             // own name, so a sample the first pass saved for this frame stays the image that was compared.
             await RenderThread.Dispatcher.InvokeAsync(() =>
             {
-                using SceneRenderer again = ExportRendererFactory.Create(reference);
+                using SceneRenderer again = ExportRendererFactory.Create(reference, fonts);
                 again.Render(again.Compositor.EvaluateGraphics(MediaTime.FromFrames(failed, new Rational(30))));
                 using Bitmap raw = again.Snapshot();
                 using Bitmap a = raw.Convert(BitmapColorType.Bgra8888, colorSpace: BitmapColorSpace.Srgb);

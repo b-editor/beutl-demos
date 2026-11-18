@@ -31,6 +31,8 @@ internal sealed class DemoMcpClient(IHost host, McpClient client, Stream[] strea
         HostApplicationBuilder builder = Host.CreateApplicationBuilder();
         builder.Logging.ClearProviders();
         builder.Services
+            .AddSingleton(new Beutl.AgentToolkit.Schema.SchemaGenerator(TestShell.Library))
+            .AddSingleton(TestShell.FontManager)
             .AddSingleton(TestShell.Project)
             .AddSingleton(TestShell.Editor)
             .AddSingleton<EditorProjectSessionGateway>()
