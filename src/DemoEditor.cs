@@ -64,6 +64,8 @@ internal sealed class DemoEditor
             Height = height,
             Content = new EditView { DataContext = editor }
         };
+        // The app's configuration, fonts and notifications reach controls through their window, as in ControlHost.
+        ControlHost.ConfigureWindow?.Invoke(Window);
         _cursor = new DemoCursorState(Window);
         // Flyout hosts must render into the captured headless window.
         Window.Styles.Add(new Style(s => s.OfType<Popup>())
