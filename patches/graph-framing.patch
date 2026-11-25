@@ -1,7 +1,7 @@
 diff --git a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
 --- a/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
 +++ b/src/Beutl.Editor.Components/GraphEditorTab/Views/GraphEditorView.Navigation.cs
-@@ -146,6 +146,8 @@
+@@ -167,6 +167,8 @@
                      / MediaTime.FromSeconds(duration).TimeToPixel(1), 0.001, 100);
                  model.Options.Value = model.Options.Value with { Scale = scale };
              }
@@ -68,9 +68,9 @@ diff --git a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs b/tests/
 +    }
 +
      [AvaloniaTest]
-     [TestCase(KeyModifiers.Control, false)]
-     [TestCase(KeyModifiers.Meta, false)]
-@@ -403,7 +441,7 @@
+     public async Task Fit_selection_shows_a_key_at_the_end_at_the_left_margin_on_a_wide_view()
+     {
+@@ -467,7 +505,7 @@
      public async Task Ruler_zoom_at_the_time_scale_limit_does_not_pan()
      {
          using var graph = await GraphScope.CreateAsync(selectAll: false);
@@ -79,7 +79,7 @@ diff --git a/tests/Beutl.HeadlessUITests/GraphEditorInteractionTests.cs b/tests/
          graph.Model.ScaleY.Value = 2;
          HeadlessTestHelpers.Render(3);
          graph.Model.ScrollOffset.Value = new Vector(75, 80);
-@@ -415,7 +453,7 @@
+@@ -479,7 +517,7 @@
          Vector before = scroll.Offset;
          graph.Window.MouseWheel(pointer, new Vector(0, 1), GraphScope.CommandModifier);
          HeadlessTestHelpers.Render();
